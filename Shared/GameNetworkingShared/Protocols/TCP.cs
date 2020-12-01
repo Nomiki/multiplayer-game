@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameNetworkingShared.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
@@ -10,7 +11,7 @@ namespace GameNetworkingShared.Protocols
         public TcpClient Socket { get; private set; }
         public int Id { get; private set; }
         private NetworkStream Stream { get; set; }
-        private byte[] ReceiveBuffer{ get; set; }
+        private byte[] ReceiveBuffer { get; set; }
 
         public TCP(int id)
         {
@@ -28,7 +29,7 @@ namespace GameNetworkingShared.Protocols
 
             Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
 
-            //TODO: Send Welcome packet
+            LogFactory.Instance.Debug($"Socket connected successfully: {socket.Client.RemoteEndPoint}");
         }
 
         private void ReceiveCallback(IAsyncResult result)

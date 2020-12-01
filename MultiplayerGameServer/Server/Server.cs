@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameNetworkingShared.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -33,7 +34,7 @@ namespace MultiplayerGameServer.Server
         {
             TcpClient client = tcpListener.EndAcceptTcpClient(result);
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
-            Console.WriteLine($"incoming connection from {client.Client.RemoteEndPoint}...");
+            LogFactory.Instance.Debug($"incoming connection from {client.Client.RemoteEndPoint}...");
 
             for (int i = 1; i <= MaxPlayers; i++)
             {
@@ -44,7 +45,7 @@ namespace MultiplayerGameServer.Server
                 }
             }
 
-            Console.WriteLine("reached max clients");
+            LogFactory.Instance.Debug($"Could not connect {client.Client.RemoteEndPoint}. Reached max clients {MaxPlayers}");
         }
 
         private static void InitializeServerData()

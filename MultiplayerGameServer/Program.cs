@@ -1,5 +1,7 @@
 ﻿using System;
+using GameNetworkingShared.Logging;
 using GameNetworkingShared.Protocols;
+using MultiplayerGameServer.Logging;
 
 namespace MultiplayerGameServer
 {
@@ -7,10 +9,17 @@ namespace MultiplayerGameServer
     {
         static void Main(string[] args)
         {
+            StartLogger();
+
             Console.Title= "Nissim Games Inc.";
             Server.Server.Start(5, Constants.ServerPort);
-            Console.WriteLine($"Me Listening on {Constants.ServerPort}");
+            LogFactory.Instance.Debug($"Listening on {Constants.ServerPort}");
             Console.ReadKey();
+        }
+
+        private static void StartLogger()
+        {
+            ConsoleLogger.Initiate();
         }
     }
 }
