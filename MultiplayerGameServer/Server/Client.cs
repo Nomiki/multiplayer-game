@@ -8,9 +8,14 @@ namespace MultiplayerGameServer.Server
         public int Id { get; private set; }
         public override TCP Tcp { get; set; }
         
-        public Client(int id)
+        public Client(int id) : base()
         {
             Id = id;
+            Start();
+        }
+        
+        public override void Start()
+        {
             Tcp = new ServerTCPImpl(Id);
         }
     }
