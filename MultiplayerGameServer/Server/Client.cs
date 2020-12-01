@@ -1,20 +1,17 @@
 ﻿using GameNetworkingShared.Protocols;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using MultiplayerGameServer.Protocols;
 
 namespace MultiplayerGameServer.Server
 {
-    public class Client
+    public class Client : GameNetworkingShared.Generic.Client
     {
         public int Id { get; private set; }
-        public TCP Tcp { get; private set; }
+        public override TCP Tcp { get; set; }
         
         public Client(int id)
         {
             Id = id;
-            Tcp = new TCP(Id);
+            Tcp = new ServerTCPImpl(Id);
         }
     }
-
 }
