@@ -11,7 +11,7 @@ namespace MultiplayerGameServer
         {
             StartLogger();
 
-            Console.Title= "Nissim Games Inc.";
+            Console.Title= "Game Server";
             Server.Server.Start(5, Constants.ServerPort);
             LogFactory.Instance.Debug($"Listening on {Constants.ServerPort}");
             Console.ReadKey();
