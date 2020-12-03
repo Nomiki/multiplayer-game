@@ -1,4 +1,4 @@
-﻿namespace GameNetworkingShared.Packet
+﻿namespace GameNetworkingShared.Packets
 {
     public interface IPacketSerializable
     {

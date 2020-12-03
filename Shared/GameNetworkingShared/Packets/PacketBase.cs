@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameNetworkingShared.Packet
+namespace GameNetworkingShared.Packets
 {
 
     /// <summary>Sent from server to client.</summary>
