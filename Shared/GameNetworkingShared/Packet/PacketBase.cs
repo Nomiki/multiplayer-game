@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GameNetworkingShared.Packet
@@ -353,5 +354,7 @@ namespace GameNetworkingShared.Packet
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public byte[] BufferCopy => buffer.ToArray();
     }
 }
