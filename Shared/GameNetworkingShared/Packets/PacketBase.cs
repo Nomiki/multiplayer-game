@@ -354,7 +354,5 @@ namespace GameNetworkingShared.Packets
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        public byte[] BufferCopy => buffer.ToArray();
     }
 }

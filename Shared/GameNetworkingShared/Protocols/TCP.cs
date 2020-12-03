@@ -1,4 +1,5 @@
-﻿using GameNetworkingShared.Packet;
+﻿using GameNetworkingShared.Logging;
+using GameNetworkingShared.Packets;
 using System;
 using System.Net.Sockets;
 
@@ -30,7 +31,7 @@ namespace GameNetworkingShared.Protocols
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                LogFactory.Instance.Error($"Error while sending data: {ex}");
             }
         }
     }

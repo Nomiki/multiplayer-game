@@ -9,6 +9,6 @@ namespace GameNetworkingShared.Objects
         public string Message { get; set; } = string.Empty;
 
         [Ordered]
-        public string Username { get; set; } = string.Empty;
+        public int ClientId { get; set; }
     }
 }
