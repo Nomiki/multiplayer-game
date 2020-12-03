@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GameNetworkingShared.Packet;
+using System;
 using System.Net.Sockets;
-using System.Text;
 
 namespace GameNetworkingShared.Protocols
 {
@@ -19,5 +18,20 @@ namespace GameNetworkingShared.Protocols
         public abstract void Connect(TcpClient client = null);
 
         protected abstract void ReceiveCallback(IAsyncResult result);
+
+        public void SendData(PacketBase packet)
+        {
+            try
+            {
+                if (Socket != null)
+                {
+                    Stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
     }
 }
