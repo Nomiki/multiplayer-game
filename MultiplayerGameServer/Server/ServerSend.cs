@@ -1,31 +1,42 @@
-﻿using GameNetworkingShared.Packet;
+﻿using GameNetworkingShared.Objects;
+using GameNetworkingShared.Packets;
 
 namespace MultiplayerGameServer.Server
 {
     public class ServerSend
     {
-        public static void Welcome(int toClient, string msg)
+        public static void Welcome(int clientId, string msg)
         {
-            using(PacketBase packet = new PacketBase((int)ServerPackets.welcome))
+            WelcomeMessage welcomeMessage = new WelcomeMessage()
             {
-                packet.Write(msg);
-                packet.Write(toClient);
-                SendTcpData(toClient, packet);
-            }
+                Message = msg,
+                ClientId = clientId,
+            };
+
+            SendTcpMessage(clientId, welcomeMessage);
         }
 
-        private static void SendTcpData(int toClient, PacketBase packet)
+        private static void SendTcpMessage<T>(int clientId, T data) where T : IPacketSerializable
+        {
+            using Packet packet = new Packet();
+            packet.WriteObj(data);
+            SendTcpMessage(clientId, packet);
+        }
+
+        private static void SendTcpMessage(int clientId, Packet packet)
         {
             packet.WriteLength();
-            Server.Clients[toClient].Tcp.SendData(packet);
+            Server.Clients[clientId].Tcp.SendData(packet);
         }
 
-        private static void SendTcpDataToAll(PacketBase packet)
+        private static void SendTcpMessageToAll<T>(T data, int exceptClient = -1) where T : IPacketSerializable
         {
-            SendTcpDataToAll(-1, packet);
+            using Packet packet = new Packet();
+            packet.WriteObj(data);
+            SendTcpMessageToAll(packet, exceptClient);
         }
 
-        private static void SendTcpDataToAll(int exceptClient, PacketBase packet)
+        private static void SendTcpMessageToAll(Packet packet, int exceptClient = -1)
         {
             packet.WriteLength();
             for (int i = 0; i < Server.MaxPlayers; i++)

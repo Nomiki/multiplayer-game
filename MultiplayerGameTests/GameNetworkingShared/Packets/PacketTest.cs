@@ -97,7 +97,7 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
 
                 using (Packet p2 = new Packet())
                 {
-                    p2.SetBytes(p.BufferCopy);
+                    p2.SetBytes(p.ToArray());
                     copy = p2.ReadObj<T>();
                 }
             }
