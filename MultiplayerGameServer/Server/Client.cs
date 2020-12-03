@@ -1,5 +1,6 @@
 ﻿using GameNetworkingShared.Protocols;
 using MultiplayerGameServer.Protocols;
+using System.Net.Sockets;
 
 namespace MultiplayerGameServer.Server
 {
@@ -17,6 +18,12 @@ namespace MultiplayerGameServer.Server
         public override void Start()
         {
             Tcp = new ServerTCPImpl(Id);
+        }
+
+        public void Connect(TcpClient socket)
+        {
+            Tcp.Connect();
+            ServerSend.Welcome(Id, "Welcome to the server");
         }
     }
 }
