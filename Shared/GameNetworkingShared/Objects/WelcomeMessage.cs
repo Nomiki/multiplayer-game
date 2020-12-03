@@ -1,4 +1,4 @@
-﻿using GameNetworkingShared.Packet;
+﻿using GameNetworkingShared.Packets;
 
 namespace GameNetworkingShared.Objects
 {

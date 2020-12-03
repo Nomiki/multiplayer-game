@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace GameNetworkingShared.Packet
+namespace GameNetworkingShared.Packets
 {
     public class Packet : PacketBase
     {
@@ -46,7 +46,7 @@ namespace GameNetworkingShared.Packet
         {
             PropertyInfo[] properties = GetOrderedProperties(obj);
             Write(TypeIdAttribute[typeof(T)]);
-            foreach(PropertyInfo pi in properties)
+            foreach (PropertyInfo pi in properties)
             {
                 object value = pi.GetValue(obj);
                 WriteFuncs[pi.PropertyType].Invoke(this, value);
@@ -60,7 +60,7 @@ namespace GameNetworkingShared.Packet
             if (typeId != TypeIdAttribute[typeof(T)])
             {
                 string error = $"Type does not match, expected {TypeIdAttribute[typeof(T)]}, got {typeId}";
-                throw new Exception(error);                   
+                throw new Exception(error);
             }
 
             object obj = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(new object[0]);

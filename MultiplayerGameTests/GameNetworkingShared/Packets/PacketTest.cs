@@ -1,9 +1,8 @@
-﻿using GameNetworkingShared.Packet;
-using PACKET = GameNetworkingShared.Packet.Packet;
+﻿using GameNetworkingShared.Packets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiplayerGameTests.Infra;
 
-namespace MultiplayerGameTests.GameNetworkingShared.Packet
+namespace MultiplayerGameTests.GameNetworkingShared.Packets
 {
     [TestClass]
     public class PacketTest
@@ -92,11 +91,11 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packet
         {
             T copy = default(T);
 
-            using (PACKET p = new PACKET())
+            using (Packet p = new Packet())
             {
                 p.WriteObj<T>(obj);
 
-                using (PACKET p2 = new PACKET())
+                using (Packet p2 = new Packet())
                 {
                     p2.SetBytes(p.BufferCopy);
                     copy = p2.ReadObj<T>();

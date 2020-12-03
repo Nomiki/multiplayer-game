@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameNetworkingShared.Packet
+namespace GameNetworkingShared.Packets
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class PacketTypeIdAttribute : Attribute
