@@ -1,6 +1,7 @@
 ﻿using GameNetworkingShared.Packets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiplayerGameTests.Infra;
+using System.Reflection;
 
 namespace MultiplayerGameTests.GameNetworkingShared.Packets
 {
@@ -97,6 +98,11 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
 
                 using (Packet p2 = new Packet(p.ToArray()))
                 {
+                    int objId = p2.ReadInt();
+                    int expectedObjId =
+                        typeof(T).GetCustomAttribute<PacketTypeIdAttribute>(false).ID;
+
+                    objId.ShouldEqual(expectedObjId);
                     copy = p2.ReadObj<T>();
                 }
             }

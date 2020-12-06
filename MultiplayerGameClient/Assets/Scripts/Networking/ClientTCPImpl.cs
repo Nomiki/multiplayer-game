@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Common;
 using GameNetworkingShared.Logging;
+using GameNetworkingShared.Objects;
+using GameNetworkingShared.Packets;
 using GameNetworkingShared.Protocols;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,14 @@ namespace Assets.Scripts.Networking
 {
     public class ClientTCPImpl : TCP
     {
+        private Packet ReceivedData { get; set; }
+
+        private static Dictionary<Type, Action<Packet>> PacketHandlers =
+            new Dictionary<Type, Action<Packet>>()
+            {
+                { typeof(WelcomeMessage), ClientHandle.Welcome }
+            };
+
         public ClientTCPImpl() : base()
         {
             // empty ctor
@@ -26,7 +36,9 @@ namespace Assets.Scripts.Networking
             };
 
             ReceiveBuffer = new byte[Constants.DataBufferSize];
-            Socket.BeginConnect(ClientConstants.ServerIp, Constants.ServerPort, ConnectCallback, Socket);
+            ReceivedData = new Packet();
+            Socket.BeginConnect(ClientConstants.ServerIp, Constants.ServerPort,
+                ConnectCallback, Socket);
         }
 
         private void ConnectCallback(IAsyncResult result)
@@ -58,7 +70,8 @@ namespace Assets.Scripts.Networking
                 Array.Copy(ReceiveBuffer, data, byteLength);
 
                 // TODO: Handle Data
-
+                bool handledData = HandleData(data);
+                ReceivedData.Reset(handledData);
                 Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
             } 
             catch(Exception ex)
@@ -66,6 +79,60 @@ namespace Assets.Scripts.Networking
                 LogFactory.Instance.Error($"Error handling receive callback. {ex.Message}");
                 // TODO: Disconnect
             }
+        }
+
+        private bool HandleData(byte[] data)
+        {
+            int packetLength = 0;
+
+            ReceivedData.SetBytes(data);
+
+            if (ReceivedData.UnreadLength >= 4)
+            {
+                packetLength = ReceivedData.ReadInt();
+                if (packetLength <= 0)
+                {
+                    return true;
+                }
+            }
+
+            while (packetLength > 0 && packetLength <= ReceivedData.UnreadLength)
+            {
+                byte[] packetBytes = ReceivedData.ReadBytes(packetLength);
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    using (Packet packet = new Packet(packetBytes))
+                    {
+                        int packetId = packet.ReadInt();
+                        HandlePacketId(packetId, packet);
+                    }
+                });
+
+                packetLength = 0;
+
+                if (ReceivedData.UnreadLength >= 4)
+                {
+                    packetLength = ReceivedData.ReadInt();
+                    if (packetLength <= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return packetLength <= 1;
+        }
+
+        private void HandlePacketId(int packetId, Packet packet)
+        {
+            Type packetMessageType = packetId.TypeById();
+
+            if (packetMessageType != null)
+            {
+                PacketHandlers[packetMessageType].Invoke(packet);
+            }
+
+            
         }
     }
 }

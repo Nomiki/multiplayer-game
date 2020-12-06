@@ -1,5 +1,6 @@
 ﻿using GameNetworkingShared.Logging;
 using GameNetworkingShared.Protocols;
+using MultiplayerGameServer.Server;
 using System;
 using System.Net.Sockets;
 
@@ -26,6 +27,10 @@ namespace MultiplayerGameServer.Protocols
             Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
 
             LogFactory.Instance.Debug($"Socket connected successfully: {socket.Client.RemoteEndPoint}, ID {Id}");
+
+            ServerSend.Welcome(Id, "Welcome to the server!");
+
+            LogFactory.Instance.Debug($"Sent Welcome packet to client {socket.Client.RemoteEndPoint}, ID {Id}");
         }
 
         protected override void ReceiveCallback(IAsyncResult result)
