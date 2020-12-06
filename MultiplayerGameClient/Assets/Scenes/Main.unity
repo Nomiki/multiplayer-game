@@ -327,8 +327,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 145015512}
-        m_TargetAssemblyTypeName: Assets.Scripts.ClientManager, Assembly-CSharp
+      - m_Target: {fileID: 1110431057}
+        m_TargetAssemblyTypeName: Assets.Scripts.UIManager, Assembly-CSharp
         m_MethodName: ConnectToServer
         m_Mode: 1
         m_Arguments:

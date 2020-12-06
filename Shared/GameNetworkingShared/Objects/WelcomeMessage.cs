@@ -10,5 +10,10 @@ namespace GameNetworkingShared.Objects
 
         [Ordered]
         public int ClientId { get; set; }
+
+        public override string ToString()
+        {
+            return $"{{ \"Message\": \"{Message}\", \"ClientId\": {ClientId} }}";
+        }
     }
 }

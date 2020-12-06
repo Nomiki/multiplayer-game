@@ -11,7 +11,7 @@ namespace Assets.Scripts
     {
         public static ClientManager Instance { get; set; }
 
-        private Client Client { get; set; }
+        public Client Client { get; private set; }
 
         private void Awake()
         {

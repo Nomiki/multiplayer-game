@@ -60,13 +60,6 @@ namespace GameNetworkingShared.Packets
         public T ReadObj<T>() where T : IPacketSerializable
         {
             PropertyInfo[] properties = GetOrderedProperties(typeof(T));
-            int typeId = ReadInt();
-            if (typeId != TypeIdAttribute[typeof(T)])
-            {
-                string error = $"Type does not match, expected {TypeIdAttribute[typeof(T)]}, got {typeId}";
-                throw new Exception(error);
-            }
-
             object obj = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(new object[0]);
             foreach (PropertyInfo pi in properties)
             {
