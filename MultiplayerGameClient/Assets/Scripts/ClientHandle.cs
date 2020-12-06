@@ -16,6 +16,6 @@ public class ClientHandle : MonoBehaviour
 
         ClientManager.Instance.Client.MyId = msg.ClientId;
 
-        //TODO: Add welcome 
+        //TODO: Add welcome received to server
     }
 }

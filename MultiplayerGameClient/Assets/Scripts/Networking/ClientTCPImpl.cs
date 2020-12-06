@@ -132,7 +132,7 @@ namespace Assets.Scripts.Networking
                 PacketHandlers[packetMessageType].Invoke(packet);
             }
 
-            
+            // Throw / Debug.error
         }
     }
 }
