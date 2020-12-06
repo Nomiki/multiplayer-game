@@ -42,6 +42,10 @@ namespace GameNetworkingShared.Packets
             };
         }
 
+        public Packet() : base() { }
+
+        public Packet(byte[] data) : base(data) { }
+
         public void WriteObj<T>(T obj) where T : IPacketSerializable
         {
             PropertyInfo[] properties = GetOrderedProperties(obj);

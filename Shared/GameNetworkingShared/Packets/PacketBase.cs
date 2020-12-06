@@ -81,16 +81,10 @@ namespace GameNetworkingShared.Packets
         }
 
         /// <summary>Gets the length of the packet's content.</summary>
-        public int Length()
-        {
-            return buffer.Count; // Return the length of buffer
-        }
+        public int Length => buffer.Count; // Return the length of buffer
 
         /// <summary>Gets the length of the unread data contained in the packet.</summary>
-        public int UnreadLength()
-        {
-            return Length() - readPos; // Return the remaining length (unread)
-        }
+        public int UnreadLength => Length - readPos; // Return the remaining length (unread)
 
         /// <summary>Resets the packet instance to allow it to be reused.</summary>
         /// <param name="_shouldReset">Whether or not to reset the packet.</param>
