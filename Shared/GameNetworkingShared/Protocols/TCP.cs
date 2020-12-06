@@ -26,7 +26,7 @@ namespace GameNetworkingShared.Protocols
             {
                 if (Socket != null)
                 {
-                    Stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                    Stream.BeginWrite(packet.ToArray(), 0, packet.Length, null, null);
                 }
             }
             catch (Exception ex)

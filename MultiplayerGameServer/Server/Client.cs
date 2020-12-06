@@ -7,7 +7,7 @@ namespace MultiplayerGameServer.Server
     public class Client : GameNetworkingShared.Generic.Client
     {
         public int Id { get; private set; }
-        public override TCP Tcp { get; set; }
+        public override TCP Tcp { get; protected set; }
         
         public Client(int id) : base()
         {
