@@ -44,30 +44,5 @@ namespace MultiplayerGameServer.Protocols
 
             LogFactory.Instance.Debug($"Sent Welcome packet to client {socket.Client.RemoteEndPoint}, ID {Id}");
         }
-
-        protected override void ReceiveCallback(IAsyncResult result)
-        {
-            try
-            {
-                int byteLength = Stream.EndRead(result);
-                if (byteLength <= 0)
-                {
-                    //TODO: disconnect
-                    return;
-                }
-
-                byte[] data = new byte[byteLength];
-                Array.Copy(ReceiveBuffer, data, byteLength);
-
-                bool handledData = HandleData(data);
-                ReceivedData.Reset(handledData);
-
-                Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
     }
 }
