@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Packets;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
@@ -8,14 +9,14 @@ using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
 {
-    public static void Welcome(Packet packet)
+    public static void Welcome(Packet packet, int fromClient = -1)
     {
         WelcomeMessage msg = packet.ReadObj<WelcomeMessage>();
 
         LogFactory.Instance.Debug($"Got WelcomeMessage: {msg}");
 
-        ClientManager.Instance.Client.MyId = msg.ClientId;
+        ClientManager.Instance.Client.Id = msg.ClientId;
 
-        //TODO: Add welcome received to server
+        ClientSend.SendWelcomeReceived();
     }
 }

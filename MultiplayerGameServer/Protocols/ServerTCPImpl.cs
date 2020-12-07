@@ -1,14 +1,24 @@
-﻿using GameNetworkingShared.Logging;
+﻿using GameNetworkingShared.Generic;
+using GameNetworkingShared.Logging;
+using GameNetworkingShared.Objects;
+using GameNetworkingShared.Packets;
 using GameNetworkingShared.Protocols;
 using MultiplayerGameServer.Server;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace MultiplayerGameServer.Protocols
 {
     public class ServerTCPImpl : TCP
     {
-        public int Id { get; protected set; }
+        private static Dictionary<Type, PacketHandler> packetHandlers = new Dictionary<Type, PacketHandler>()
+        {
+            { typeof(WelcomeReceivedMessage), ServerHandle.WelcomeReceived }
+        };
+
+        protected override Dictionary<Type, PacketHandler> PacketHandlers =>
+            packetHandlers;
 
         public ServerTCPImpl(int id) : base()
         {
@@ -23,6 +33,8 @@ namespace MultiplayerGameServer.Protocols
 
             Stream = Socket.GetStream();
             ReceiveBuffer = new byte[Constants.DataBufferSize];
+
+            ReceivedData = new Packet();
 
             Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
 
@@ -46,6 +58,9 @@ namespace MultiplayerGameServer.Protocols
 
                 byte[] data = new byte[byteLength];
                 Array.Copy(ReceiveBuffer, data, byteLength);
+
+                bool handledData = HandleData(data);
+                ReceivedData.Reset(handledData);
 
                 Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
             }
