@@ -19,11 +19,5 @@ namespace MultiplayerGameServer.Server
         {
             Tcp = new ServerTCPImpl(Id);
         }
-
-        public void Connect(TcpClient socket)
-        {
-            Tcp.Connect();
-            ServerSend.Welcome(Id, "Welcome to the server");
-        }
     }
 }

@@ -6,7 +6,7 @@ namespace Assets.Scripts.Networking
     {
         public override TCP Tcp { get; protected set; }
 
-        public int MyId { get; set; }
+        public int Id { get; set; }
 
         public override void Start()
         {

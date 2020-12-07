@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Common;
+using GameNetworkingShared.Generic;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
@@ -14,13 +15,14 @@ namespace Assets.Scripts.Networking
 {
     public class ClientTCPImpl : TCP
     {
-        private Packet ReceivedData { get; set; }
-
-        private static Dictionary<Type, Action<Packet>> PacketHandlers =
-            new Dictionary<Type, Action<Packet>>()
+        private static Dictionary<Type, PacketHandler> packetHandlers =
+            new Dictionary<Type, PacketHandler>()
             {
-                { typeof(WelcomeMessage), ClientHandle.Welcome }
+                        { typeof(WelcomeMessage), ClientHandle.Welcome }
             };
+
+        protected override Dictionary<Type, PacketHandler> PacketHandlers =>
+            packetHandlers;
 
         public ClientTCPImpl() : base()
         {
@@ -69,70 +71,15 @@ namespace Assets.Scripts.Networking
                 byte[] data = new byte[byteLength];
                 Array.Copy(ReceiveBuffer, data, byteLength);
 
-                // TODO: Handle Data
                 bool handledData = HandleData(data);
                 ReceivedData.Reset(handledData);
                 Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 LogFactory.Instance.Error($"Error handling receive callback. {ex.Message}");
                 // TODO: Disconnect
             }
-        }
-
-        private bool HandleData(byte[] data)
-        {
-            int packetLength = 0;
-
-            ReceivedData.SetBytes(data);
-
-            if (ReceivedData.UnreadLength >= 4)
-            {
-                packetLength = ReceivedData.ReadInt();
-                if (packetLength <= 0)
-                {
-                    return true;
-                }
-            }
-
-            while (packetLength > 0 && packetLength <= ReceivedData.UnreadLength)
-            {
-                byte[] packetBytes = ReceivedData.ReadBytes(packetLength);
-                ThreadManager.ExecuteOnMainThread(() =>
-                {
-                    using (Packet packet = new Packet(packetBytes))
-                    {
-                        int packetId = packet.ReadInt();
-                        HandlePacketId(packetId, packet);
-                    }
-                });
-
-                packetLength = 0;
-
-                if (ReceivedData.UnreadLength >= 4)
-                {
-                    packetLength = ReceivedData.ReadInt();
-                    if (packetLength <= 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return packetLength <= 1;
-        }
-
-        private void HandlePacketId(int packetId, Packet packet)
-        {
-            Type packetMessageType = packetId.TypeById();
-
-            if (packetMessageType != null)
-            {
-                PacketHandlers[packetMessageType].Invoke(packet);
-            }
-
-            // Throw / Debug.error
         }
     }
 }
