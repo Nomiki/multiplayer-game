@@ -25,7 +25,30 @@ namespace GameNetworkingShared.Protocols
 
         public abstract void Connect(TcpClient client = null);
 
-        protected abstract void ReceiveCallback(IAsyncResult result);
+        protected virtual void ReceiveCallback(IAsyncResult result)
+        {
+            try
+            {
+                int byteLength = Stream.EndRead(result);
+                if (byteLength <= 0)
+                {
+                    //TODO: disconnect
+                    return;
+                }
+
+                byte[] data = new byte[byteLength];
+                Array.Copy(ReceiveBuffer, data, byteLength);
+
+                bool handledData = HandleData(data);
+                ReceivedData.Reset(handledData);
+
+                Stream.BeginRead(ReceiveBuffer, 0, Constants.DataBufferSize, ReceiveCallback, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
         public void SendData(PacketBase packet)
         {
