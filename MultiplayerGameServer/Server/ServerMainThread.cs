@@ -23,7 +23,7 @@ namespace MultiplayerGameServer.Server
                 while (isRunning)
                 {
                     nextIterationTime = nextIterationTime.AddMilliseconds(ServerConsts.MsPerTick);
-                    ThreadManager.UpdateMain();
+                    TaskManager.Instance.RunQueuedTasks();
                     DateTime now = DateTime.Now;
                     if (nextIterationTime > now)
                     {

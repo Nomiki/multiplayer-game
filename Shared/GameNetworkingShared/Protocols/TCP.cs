@@ -16,6 +16,7 @@ namespace GameNetworkingShared.Protocols
         protected byte[] ReceiveBuffer { get; set; }
         protected abstract Dictionary<Type, PacketHandler> PacketHandlers { get; }
         protected Packet ReceivedData { get; set; }
+        protected ITaskManager TaskManager => Threading.TaskManager.Instance;
         public int Id { get; protected set; } = -1;
 
         protected TCP()
@@ -83,12 +84,11 @@ namespace GameNetworkingShared.Protocols
             while (packetLength > 0 && packetLength <= ReceivedData.UnreadLength)
             {
                 byte[] packetBytes = ReceivedData.ReadBytes(packetLength);
-                ThreadManager.ExecuteOnMainThread(() =>
+                TaskManager.QueueNewTask(() =>
                 {
                     using (Packet packet = new Packet(packetBytes))
                     {
-                        int packetId = packet.ReadInt();
-                        HandlePacketId(packetId, packet);
+                        HandlePacketData(packet);
                     }
                 });
 
@@ -107,8 +107,9 @@ namespace GameNetworkingShared.Protocols
             return packetLength <= 1;
         }
 
-        private void HandlePacketId(int packetMessageId, Packet packet)
+        private void HandlePacketData(Packet packet)
         {
+            int packetMessageId = packet.ReadInt();
             Type packetMessageType = packetMessageId.TypeById();
 
             if (packetMessageType != null)
