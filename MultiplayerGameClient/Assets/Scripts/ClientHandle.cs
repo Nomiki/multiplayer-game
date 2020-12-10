@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Networking;
 using Assets.Scripts.Packets;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class ClientHandle : MonoBehaviour
@@ -15,8 +17,11 @@ public class ClientHandle : MonoBehaviour
 
         LogFactory.Instance.Debug($"Got WelcomeMessage: {msg}");
 
-        ClientManager.Instance.Client.Id = msg.ClientId;
+        Client client = ClientManager.Instance.Client;
+        client.Id = msg.ClientId;
 
         ClientSend.SendWelcomeReceived();
+
+        client.Udp.Connect(((IPEndPoint)client.TcpEndpoint).Port);
     }
 }

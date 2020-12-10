@@ -48,7 +48,7 @@ namespace GameNetworkingShared.Threading
                     newTaskQueued = false;
                 }
 
-                foreach(Action task in taskQueueCopy)
+                foreach (Action task in taskQueueCopy)
                 {
                     task.Invoke();
                 }

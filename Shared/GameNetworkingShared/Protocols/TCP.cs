@@ -9,7 +9,7 @@ using System.Net.Sockets;
 
 namespace GameNetworkingShared.Protocols
 {
-    public abstract class TCP
+    public abstract class TCP : IProtocol
     {
         public TcpClient Socket { get; protected set; }
         protected NetworkStream Stream { get; set; }
@@ -62,7 +62,7 @@ namespace GameNetworkingShared.Protocols
             }
             catch (Exception ex)
             {
-                LogFactory.Instance.Error($"Error while sending data: {ex}");
+                LogFactory.Instance.Error($"Error while sending TCP data: {ex}");
             }
         }
 
