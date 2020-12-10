@@ -13,6 +13,7 @@ namespace MultiplayerGameServer.Server
         public static int Port { get; private set; }
 
         private static TcpListener tcpListener;
+        private static ServerUdpHandler udpHandler;
 
         public static Dictionary<int, Client> Clients { get; private set; }
 
@@ -27,6 +28,7 @@ namespace MultiplayerGameServer.Server
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
 
+            udpHandler = new ServerUdpHandler(Port);
         }
 
         private static void TCPConnectCallback(IAsyncResult result)
