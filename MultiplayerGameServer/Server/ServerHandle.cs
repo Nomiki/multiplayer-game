@@ -19,5 +19,11 @@ namespace MultiplayerGameServer.Server
                 LogFactory.Instance.Error($"Player '{message.Username}', ID: {fromClient} assumed wrong client ID {message.ClientId}");
             }
         }
+
+        public static void UdpTestReceived(Packet packet, int fromClient = -1)
+        {
+            UdpTest test = packet.ReadObj<UdpTest>();
+            LogFactory.Instance.Info($"Player {Server.Clients[fromClient].TcpEndpoint} connected successfully in udp: {test.Message}");
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GameNetworkingShared.Generic;
 using GameNetworkingShared.Logging;
+using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
 using GameNetworkingShared.Protocols;
 using System;
@@ -12,16 +13,17 @@ namespace MultiplayerGameServer.Server
 {
     public class ServerUdpHandler : UDP
     {
-        protected override Dictionary<Type, PacketHandler> PacketHandlers => throw new NotImplementedException();
+        protected override Dictionary<Type, PacketHandler> PacketHandlers
+            => new Dictionary<Type, PacketHandler>()
+            {
+                { typeof(UdpTest), ServerHandle.UdpTestReceived }
+            };
 
-        private static UdpClient udpListener;
-
-        //private static Dictionary<int, Client> Clients => Server.Clients;
 
         public ServerUdpHandler(int port) : base()
         {
-            udpListener = new UdpClient(port);
-            udpListener.BeginReceive(ReceiveCallback, null);
+            Socket = new UdpClient(port);
+            Socket.BeginReceive(ReceiveCallback, null);
         }
 
         public override void Connect(int id)
@@ -33,8 +35,8 @@ namespace MultiplayerGameServer.Server
             try
             {
                 IPEndPoint endPoint = null;
-                byte[] data = udpListener.EndReceive(result, ref endPoint);
-                udpListener.BeginReceive(ReceiveCallback, null);
+                byte[] data = Socket.EndReceive(result, ref endPoint);
+                Socket.BeginReceive(ReceiveCallback, null);
 
                 if (data.Length < 4)
                 {
@@ -43,29 +45,84 @@ namespace MultiplayerGameServer.Server
 
                 using Packet packet = new Packet(data);
                 int clientId = packet.ReadInt();
-                if (Server.Clients.ContainsKey(clientId))
-                {
-                    Client client = Server.Clients[clientId];
-                    if (client.UdpEndpoint == null)
-                    {
-                        Server.Clients[clientId].UdpEndpoint = endPoint;
-                        return;
-                    } 
-                    else if (!client.UdpEndpoint.Equals(endPoint))
-                    {
-                        LogFactory.Instance.Error($"Client with id {clientId} tries to connect with a different endpoint {endPoint}, registered endpoint: {client.UdpEndpoint}");
-                        return;
-                    }
-                    else
-                    {
-
-                    }
-                }
-                else
+                if (!Server.Clients.ContainsKey(clientId))
                 {
                     LogFactory.Instance.Error($"Client with id {clientId} tries to connect with UDP but doesn't exist");
                     return;
                 }
+
+                Client client = Server.Clients[clientId];
+                if (client.UdpEndpoint == null)
+                {
+                    Server.Clients[clientId].SetUdpEndpoint(endPoint);
+                }
+                else if (!client.UdpEndpoint.Equals(endPoint))
+                {
+                    LogFactory.Instance.Error($"Client with id {clientId} tries to connect with a different endpoint {endPoint}, registered endpoint: {client.UdpEndpoint}");
+                }
+                else
+                {
+                    byte[] packetData = packet.ReadBytes(packet.UnreadLength);
+                    HandleData(packetData, clientId);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFactory.Instance.Error($"Error receiving UDP data {ex}");
+            }
+        }
+
+        public void SendMessage<T>(int clientId, T data) where T : IPacketSerializable
+        {
+            using (Packet packet = new Packet())
+            {
+                packet.WriteObj(data);
+                SendMessage(clientId, packet);
+            }
+        }
+
+        private void SendMessage(int clientId, Packet packet)
+        {
+            packet.WriteLength();
+            SendData(packet, Server.Clients[clientId].UdpEndpoint);
+        }
+
+        public void SendMessageToAll<T>(T data, int exceptClient = -1)
+            where T : IPacketSerializable
+        {
+            using (Packet packet = new Packet())
+            {
+                packet.WriteObj(data);
+                SendMessageToAll(packet, exceptClient);
+            }
+        }
+
+        private void SendMessageToAll(Packet packet, int exceptClient = -1)
+        {
+            packet.WriteLength();
+            foreach (Client client in Server.Clients.Values)
+            {
+                if (client.UdpEndpoint != null && client.Id != exceptClient)
+                {
+                    SendData(packet, client.UdpEndpoint);
+                }
+            }
+        }
+
+        public override void SendData(PacketBase packet, IPEndPoint endPoint = null)
+        {
+            try
+            {
+                if (endPoint == null)
+                {
+                    throw new ArgumentNullException("endPoint");
+                }
+
+                Socket?.BeginSend(packet.ToArray(), packet.Length, endPoint, null, null);
+            }
+            catch (Exception ex)
+            {
+                LogFactory.Instance.Error($"Error while sending UDP data: {ex} to {endPoint}");
             }
         }
     }

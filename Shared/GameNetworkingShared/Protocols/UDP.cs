@@ -43,7 +43,7 @@ namespace GameNetworkingShared.Protocols
                     return;
                 }
 
-                HandleData(data);
+                HandleData(data, Id);
             } 
             catch (Exception ex)
             {
@@ -51,20 +51,9 @@ namespace GameNetworkingShared.Protocols
             }
         }
 
-        public void SendData(PacketBase packet)
-        {
-            try
-            {
-                packet.InsertInt(Id);
-                Socket?.BeginSend(packet.ToArray(), packet.Length, null, null);
-            }
-            catch (Exception ex)
-            {
-                LogFactory.Instance.Error($"Error while sending UDP data: {ex}");
-            }
-        }
+        public abstract void SendData(PacketBase packet, IPEndPoint endPoint = null);
 
-        private void HandleData(byte[] data)
+        protected void HandleData(byte[] data, int id)
         {
             byte[] realData = null;
             using (Packet packet = new Packet(data))
@@ -77,19 +66,19 @@ namespace GameNetworkingShared.Protocols
             {
                 using (Packet packet = new Packet(realData))
                 {
-                    HandlePacketData(packet);
+                    HandlePacketData(packet, id);
                 }
             });
         }
 
-        private void HandlePacketData(Packet packet)
+        private void HandlePacketData(Packet packet, int id)
         {
             int packetMessageId = packet.ReadInt();
             Type packetMessageType = packetMessageId.TypeById();
 
             if (packetMessageType != null)
             {
-                PacketHandlers[packetMessageType].Invoke(packet, Id);
+                PacketHandlers[packetMessageType].Invoke(packet, id);
                 return;
             }
 

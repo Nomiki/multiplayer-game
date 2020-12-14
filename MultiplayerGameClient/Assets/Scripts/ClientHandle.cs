@@ -22,6 +22,14 @@ public class ClientHandle : MonoBehaviour
 
         ClientSend.SendWelcomeReceived();
 
-        client.Udp.Connect(((IPEndPoint)client.TcpEndpoint).Port);
+        client.Udp.Connect(((IPEndPoint)client.Tcp.Socket.Client.LocalEndPoint).Port);
+    }
+
+    public static void HandleUdpTest(Packet packet, int fromClient = -1)
+    {
+        UdpTest test = packet.ReadObj<UdpTest>();
+        LogFactory.Instance.Debug($"Got UdpTest message: '{test.Message}'");
+
+        ClientSend.SendUdpTestReceived();
     }
 }

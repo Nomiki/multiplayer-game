@@ -1,5 +1,5 @@
 ﻿using GameNetworkingShared.Objects;
-using GameNetworkingShared.Packets;
+using GameNetworkingShared.Protocols;
 
 namespace MultiplayerGameServer.Server
 {
@@ -14,6 +14,16 @@ namespace MultiplayerGameServer.Server
             };
 
             Server.Clients[clientId].Tcp.SendMessage(welcomeMessage);
+        }
+
+        public static void UdpTest(int clientId)
+        {
+            UdpTest test = new UdpTest()
+            {
+                Message = "You have successfully connected via udp, good job ma man",
+            };
+
+            Server.UdpHandler.SendMessage(clientId, test);
         }
     }
 }
