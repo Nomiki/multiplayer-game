@@ -9,7 +9,7 @@ namespace MultiplayerGameServer.Server
     {
         public int Id { get; private set; }
         public override TCP Tcp { get; protected set; }
-        public IPEndPoint UdpEndpoint { get; set; }
+        public IPEndPoint UdpEndpoint { get; private set; }
 
         public Client(int id) : base()
         {
@@ -20,6 +20,12 @@ namespace MultiplayerGameServer.Server
         public override void Start()
         {
             Tcp = new ServerTCPImpl(Id);
+        }
+
+        public void SetUdpEndpoint(IPEndPoint endpoint)
+        {
+            UdpEndpoint = endpoint;
+            ServerSend.UdpTest(Id);
         }
     }
 }

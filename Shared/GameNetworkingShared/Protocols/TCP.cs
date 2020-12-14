@@ -5,6 +5,7 @@ using GameNetworkingShared.Packets;
 using GameNetworkingShared.Threading;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 
 namespace GameNetworkingShared.Protocols
@@ -51,7 +52,7 @@ namespace GameNetworkingShared.Protocols
             }
         }
 
-        public void SendData(PacketBase packet)
+        public void SendData(PacketBase packet, IPEndPoint endPoint = null)
         {
             try
             {

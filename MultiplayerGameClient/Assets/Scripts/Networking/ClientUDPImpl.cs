@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Common;
 using GameNetworkingShared.Generic;
+using GameNetworkingShared.Logging;
+using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
 using GameNetworkingShared.Protocols;
 using System;
@@ -19,8 +21,11 @@ namespace Assets.Scripts.Networking
             EndPoint = new IPEndPoint(IPAddress.Parse(ClientConstants.ServerIp), Constants.ServerPort);
         }
 
-        protected override Dictionary<Type, PacketHandler> PacketHandlers 
-            => throw new NotImplementedException();
+        protected override Dictionary<Type, PacketHandler> PacketHandlers
+            => new Dictionary<Type, PacketHandler>()
+            {
+                { typeof(UdpTest), ClientHandle.HandleUdpTest }
+            };
 
         public override void Connect(int localPort)
         {
@@ -33,6 +38,37 @@ namespace Assets.Scripts.Networking
             {
                 SendData(packet);
             }
+
+            LogFactory.Instance.Debug($"Successfully connected to endpoint {EndPoint}");
+        }
+
+        public override void SendData(PacketBase packet, IPEndPoint endPoint = null)
+        {
+            try
+            {
+                packet.InsertInt(Id);
+
+                Socket?.BeginSend(packet.ToArray(), packet.Length, null, null);
+            }
+            catch (Exception ex)
+            {
+                LogFactory.Instance.Error($"Error while sending UDP data: {ex}");
+            }
+        }
+
+        public void SendMessage<T>(T data) where T : IPacketSerializable
+        {
+            using (Packet packet = new Packet())
+            {
+                packet.WriteObj(data);
+                SendMessage(packet);
+            }
+        }
+
+        private void SendMessage(Packet packet)
+        {
+            packet.WriteLength();
+            SendData(packet);
         }
     }
 }
