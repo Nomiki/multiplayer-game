@@ -1,13 +1,14 @@
-﻿using Assets.Scripts.Networking;
+﻿using Assets.Scripts.Client.Networking;
+using Assets.Scripts.UI;
 using GameNetworkingShared.Objects;
-using GameNetworkingShared.Packets;
 using GameNetworkingShared.Protocols;
-using System;
 
-namespace Assets.Scripts.Packets
+namespace Assets.Scripts.Client
 {
     public static class ClientSend
     {
+        private static Networking.Client Client => ClientManager.Instance.Client;
+
         public static void SendWelcomeReceived()
         {
             WelcomeReceivedMessage message = new WelcomeReceivedMessage()
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Packets
                 ClientId = ClientManager.Instance.Client.Id,
             };
 
-            ClientManager.Instance.Client.Tcp.SendMessage(message);
+            Client.Tcp.SendMessage(message);
         }
 
         internal static void SendUdpTestReceived()
@@ -26,8 +27,7 @@ namespace Assets.Scripts.Packets
                 Message = "Halo Ayelet UDP"
             };
 
-            ClientUDPImpl client = ClientManager.Instance.Client.Udp as ClientUDPImpl;
-            client?.SendMessage(test);
+            Client.Udp.SendMessage(test);
         }
-    }    
+    }
 }

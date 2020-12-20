@@ -1,8 +1,9 @@
-﻿using GameNetworkingShared.Logging;
+﻿using Assets.Scripts.Client;
+using GameNetworkingShared.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.UI
 {
     public class UIManager : MonoBehaviour
     {

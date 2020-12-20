@@ -1,17 +1,15 @@
 ﻿using Assets.Scripts.Logging;
-using Assets.Scripts.Networking;
 using GameNetworkingShared.Logging;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using CLIENT = Assets.Scripts.Client.Networking.Client;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Client
 {
     public class ClientManager : MonoBehaviour
     {
         public static ClientManager Instance { get; set; }
 
-        public Client Client { get; private set; }
+        public CLIENT Client { get; private set; }
 
         private void Awake()
         {
@@ -30,7 +28,7 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            Client = new Client();
+            Client = new CLIENT();
             Client.Start();
         }
 

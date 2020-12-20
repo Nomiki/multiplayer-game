@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace Assets.Scripts.Networking
+namespace Assets.Scripts.Client.Networking
 {
     public class ClientTCPImpl : TCP
     {

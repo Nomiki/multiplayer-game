@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using GameNetworkingShared.Logging;
+﻿using GameNetworkingShared.Logging;
 
 namespace Assets.Scripts.Logging
 {

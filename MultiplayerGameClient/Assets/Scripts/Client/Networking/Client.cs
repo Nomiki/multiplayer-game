@@ -1,12 +1,12 @@
 using GameNetworkingShared.Protocols;
 
-namespace Assets.Scripts.Networking
+namespace Assets.Scripts.Client.Networking
 {
     public class Client : GameNetworkingShared.Generic.Client
     {
         public override TCP Tcp { get; protected set; }
 
-        public UDP Udp { get; protected set; }
+        public ClientUDPImpl Udp { get; protected set; }
 
         private int id;
         public int Id { 
