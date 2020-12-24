@@ -15,7 +15,8 @@ namespace Assets.Scripts.Client.Networking
         private static Dictionary<Type, PacketHandler> packetHandlers =
             new Dictionary<Type, PacketHandler>()
             {
-                        { typeof(WelcomeMessage), ClientHandle.Welcome }
+                { typeof(WelcomeMessage), ClientHandle.Welcome },
+                { typeof(Player), ClientHandle.HandlePlayerJoin }
             };
 
         protected override Dictionary<Type, PacketHandler> PacketHandlers =>
