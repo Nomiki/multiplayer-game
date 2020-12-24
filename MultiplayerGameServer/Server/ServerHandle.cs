@@ -17,7 +17,10 @@ namespace MultiplayerGameServer.Server
             if (message.ClientId != fromClient)
             {
                 LogFactory.Instance.Error($"Player '{message.Username}', ID: {fromClient} assumed wrong client ID {message.ClientId}");
+                return;
             }
+
+            Server.Clients[fromClient].SpawnIntoGame(message.Username);
         }
 
         public static void UdpTestReceived(Packet packet, int fromClient = -1)
