@@ -32,14 +32,30 @@ namespace GameNetworkingShared.Packets
 
             ReadFuncs = new Dictionary<Type, Func<Packet, object>>()
             {
-                { typeof(bool),    (p) => p.ReadBool() },
-                { typeof(byte),    (p) => p.ReadByte() },
-                { typeof(short),   (p) => p.ReadShort() },
-                { typeof(int),     (p) => p.ReadInt() },
-                { typeof(long),    (p) => p.ReadLong() },
-                { typeof(float),   (p) => p.ReadFloat() },
+                { typeof(bool),    (p) => p.ReadBool()   },
+                { typeof(byte),    (p) => p.ReadByte()   },
+                { typeof(short),   (p) => p.ReadShort()  },
+                { typeof(int),     (p) => p.ReadInt()    },
+                { typeof(long),    (p) => p.ReadLong()   },
+                { typeof(float),   (p) => p.ReadFloat()  },
                 { typeof(string),  (p) => p.ReadString() },
             };
+
+            AddPacketSerializableObjectReadWriteMethods();
+        }
+
+        private static void AddPacketSerializableObjectReadWriteMethods()
+        {
+            Type @interface = typeof(IPacketSerializable);
+            Assembly assembly = @interface.Assembly;
+            IEnumerable<Type> types = assembly.GetTypes()
+                .Where(t => @interface.IsAssignableFrom(t) && t != @interface);
+
+            foreach (Type t in types)
+            {
+                WriteFuncs.Add(t, (p, o) => p.WriteObj((IPacketSerializable)o));
+                ReadFuncs.Add(t, (p) => p.ReadNestedObj<IPacketSerializable>(t));
+            }
         }
 
         public Packet() : base() { }
@@ -48,8 +64,9 @@ namespace GameNetworkingShared.Packets
 
         public void WriteObj<T>(T obj) where T : IPacketSerializable
         {
-            PropertyInfo[] properties = GetOrderedProperties(obj);
-            Write(TypeIdAttribute[typeof(T)]);
+            Type objType = obj.GetType();
+            PropertyInfo[] properties = GetOrderedProperties(objType);
+            Write(TypeIdAttribute[objType]);
             foreach (PropertyInfo pi in properties)
             {
                 object value = pi.GetValue(obj);
@@ -70,7 +87,26 @@ namespace GameNetworkingShared.Packets
             return (T)obj;
         }
 
-        private static PropertyInfo[] GetOrderedProperties<T>(T obj)
+        private T ReadNestedObj<T>(Type objType) where T : IPacketSerializable
+        {
+            PropertyInfo[] properties = GetOrderedProperties(objType);
+            int typeId = ReadInt();
+            if (typeId != TypeIdAttribute[objType])
+            {
+                throw new ArgumentException($"Expected type id {TypeIdAttribute[objType]} got {typeId}");
+            }
+
+            object obj = objType.GetConstructor(Type.EmptyTypes).Invoke(new object[0]);
+            foreach (PropertyInfo pi in properties)
+            {
+                object value = ReadFuncs[pi.PropertyType].Invoke(this);
+                pi.SetValue(obj, value);
+            }
+
+            return (T)obj;
+        }
+
+        private static PropertyInfo[] GetOrderedProperties<T>()
         {
             Type typeofT = typeof(T);
             return GetOrderedProperties(typeofT);

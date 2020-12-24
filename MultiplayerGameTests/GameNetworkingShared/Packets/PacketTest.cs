@@ -1,4 +1,5 @@
-﻿using GameNetworkingShared.Packets;
+﻿using GameNetworkingShared.Objects;
+using GameNetworkingShared.Packets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiplayerGameTests.Infra;
 using System.Reflection;
@@ -86,6 +87,32 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
             response.LongIntProperty.ShouldEqual(obj.LongIntProperty);
             response.ShortProperty.ShouldEqual(obj.ShortProperty);
             response.StringProperty.ShouldEqual(obj.StringProperty);
+        }
+
+        [TestMethod]
+        public void TestPacket_ClassHasNestedIPacketSerializable_ShouldConvertBackSuccessfully()
+        {
+            Player obj = new Player()
+            {
+                Id = 3,
+                Username = "username",
+                Position = new PlayerPosition()
+                {
+                    Angle = 143.4f,
+                    X = -4f,
+                    Y = -5f,
+                    Z = 4f,
+                },
+            };
+
+            Player response = DoPacketRoundTripMock(obj);
+
+            response.Id.ShouldEqual(obj.Id);
+            response.Username.ShouldEqual(obj.Username);
+            response.Position.Angle.ShouldEqual(obj.Position.Angle);
+            response.Position.X.ShouldEqual(obj.Position.X);
+            response.Position.Y.ShouldEqual(obj.Position.Y);
+            response.Position.Z.ShouldEqual(obj.Position.Z);
         }
 
         private static T DoPacketRoundTripMock<T>(T obj) where T : IPacketSerializable
