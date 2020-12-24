@@ -30,5 +30,13 @@ namespace Assets.Scripts.Client
 
             ClientSend.SendUdpTestReceived();
         }
+
+        public static void HandlePlayerJoin(Packet packet, int fromClient = -1)
+        {
+            Player player = packet.ReadObj<Player>();
+            LogFactory.Instance.Debug($"Got Player: {player.ToJson()}");
+
+            GameManager.Instance.SpawnPlayer(player);
+        }
     }
 }

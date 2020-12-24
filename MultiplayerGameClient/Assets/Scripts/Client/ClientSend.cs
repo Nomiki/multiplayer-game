@@ -24,7 +24,7 @@ namespace Assets.Scripts.Client
         {
             UdpTest test = new UdpTest()
             {
-                Message = "Halo Ayelet UDP"
+                Message = "UDP_CONFIRMED"
             };
 
             Client.Udp.SendMessage(test);

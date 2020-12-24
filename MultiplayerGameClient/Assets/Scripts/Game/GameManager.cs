@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject localPlayerPrefab;
     public GameObject remotePlayerPrefab;
+    public GameObject gameCamera;
 
     private void Awake()
     {
@@ -39,6 +40,18 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = new Vector3(playerData.Position.X, playerData.Position.Y, playerData.Position.Z);
         Quaternion rotation = Quaternion.AngleAxis(playerData.Position.Angle, Vector3.forward);
-        GameObject player = Instantiate(chosenPrefab, position, rotation);
+        GameObject player = Instantiate(chosenPrefab, position, rotation, this.transform);
+
+        if (playerData.Id == ClientManager.Instance.Client.Id)
+        {
+            gameCamera.GetComponent<CameraController>().Player = player.transform;
+        }
+
+        PlayerManager playerManager = player.GetComponent<PlayerManager>();
+        if (playerManager != null)
+        {
+            playerManager.SetPlayerData(playerData);
+            Players.Add(playerData.Id, playerManager);
+        }
     }
 }

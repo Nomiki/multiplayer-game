@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GameNetworkingShared.Objects;
 using System.Text;
 
 namespace GameNetworkingShared.Packets
 {
     public class Packet : PacketBase
     {
-        private static Dictionary<Type, PropertyInfo[]> PropertiesForType { get; set; }
-            = new Dictionary<Type, PropertyInfo[]>();
-
-        private static Dictionary<Type, int> TypeIdAttribute { get; set; }
-            = new Dictionary<Type, int>();
-
         private static Dictionary<Type, Action<Packet, object>> WriteFuncs { get; set; }
         private static Dictionary<Type, Func<Packet, object>> ReadFuncs { get; set; }
 
@@ -65,8 +60,8 @@ namespace GameNetworkingShared.Packets
         public void WriteObj<T>(T obj) where T : IPacketSerializable
         {
             Type objType = obj.GetType();
-            PropertyInfo[] properties = GetOrderedProperties(objType);
-            Write(TypeIdAttribute[objType]);
+            PropertyInfo[] properties = objType.GetOrderedProperties();
+            Write(ObjectsExtensions.TypeIdAttribute[objType]);
             foreach (PropertyInfo pi in properties)
             {
                 object value = pi.GetValue(obj);
@@ -76,7 +71,7 @@ namespace GameNetworkingShared.Packets
 
         public T ReadObj<T>() where T : IPacketSerializable
         {
-            PropertyInfo[] properties = GetOrderedProperties(typeof(T));
+            PropertyInfo[] properties = typeof(T).GetOrderedProperties();
             object obj = typeof(T).GetConstructor(Type.EmptyTypes).Invoke(new object[0]);
             foreach (PropertyInfo pi in properties)
             {
@@ -89,11 +84,12 @@ namespace GameNetworkingShared.Packets
 
         private T ReadNestedObj<T>(Type objType) where T : IPacketSerializable
         {
-            PropertyInfo[] properties = GetOrderedProperties(objType);
+            PropertyInfo[] properties = objType.GetOrderedProperties();
             int typeId = ReadInt();
-            if (typeId != TypeIdAttribute[objType])
+            int expectedTypeId = ObjectsExtensions.TypeIdAttribute[objType];
+            if (typeId != expectedTypeId)
             {
-                throw new ArgumentException($"Expected type id {TypeIdAttribute[objType]} got {typeId}");
+                throw new ArgumentException($"Expected type id {expectedTypeId} got {typeId}");
             }
 
             object obj = objType.GetConstructor(Type.EmptyTypes).Invoke(new object[0]);
@@ -104,38 +100,6 @@ namespace GameNetworkingShared.Packets
             }
 
             return (T)obj;
-        }
-
-        private static PropertyInfo[] GetOrderedProperties<T>()
-        {
-            Type typeofT = typeof(T);
-            return GetOrderedProperties(typeofT);
-        }
-
-        private static PropertyInfo[] GetOrderedProperties(Type typeofT)
-        {
-            if (PropertiesForType.ContainsKey(typeofT))
-            {
-                return PropertiesForType[typeofT];
-            }
-
-            PropertyInfo[] propertiesForT = typeofT.GetProperties()
-                .Where(p => Attribute.IsDefined(p, typeof(OrderedAttribute)))
-                .Where(p => IsSupportedType(p.PropertyType))
-                .OrderBy(p => p.GetCustomAttribute<OrderedAttribute>().Order)
-                .ToArray();
-
-            int packetTypeId = typeofT.GetCustomAttribute<PacketTypeIdAttribute>(false).ID;
-
-            TypeIdAttribute[typeofT] = packetTypeId;
-            PropertiesForType[typeofT] = propertiesForT;
-
-            return propertiesForT;
-        }
-
-        private static bool IsSupportedType(Type t)
-        {
-            return WriteFuncs.Keys.Contains(t);
         }
     }
 }
