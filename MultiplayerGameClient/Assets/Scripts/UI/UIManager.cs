@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI
         {
             if (Instance == null)
             {
+                LogFactory.Instance.Debug($"loaded {this.GetType()}: {this}");
                 Instance = this;
             }
             else if (Instance != this)

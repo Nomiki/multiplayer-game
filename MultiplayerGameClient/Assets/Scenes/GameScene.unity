@@ -443,7 +443,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1063739594}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Assets.Scripts.UIManager, Assembly-CSharp
         m_MethodName: ConnectToServer
         m_Mode: 1
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 954251840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60323823869596e499c7f53d5e9a1630, type: 3}
+  m_Script: {fileID: 11500000, guid: a983ace792cb8c948bacb9eb95f07ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &954251842
@@ -784,7 +784,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 954251840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31cbac8a2cd2c9e4f8c665b27f2d77cb, type: 3}
+  m_Script: {fileID: 11500000, guid: cde94042b848e7f4ab33f964767bada9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &954251843
@@ -830,9 +830,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1063739593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10e4bf39eb9322e458e7f74a8ec6e9f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 318db5f12fe955f41b5b2ae4b4487363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartMenu: {fileID: 0}
+  UsernameField: {fileID: 0}
 --- !u!114 &1063739595
 MonoBehaviour:
   m_ObjectHideFlags: 0
