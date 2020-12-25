@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Logging;
+using Assets.Scripts.UI;
 using GameNetworkingShared.Logging;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,25 +7,22 @@ using UnityEngine;
 
 public class ShipSelectionController : MonoBehaviour
 {
-    public GameObject[] ShipPrefabs;
-
-    public int Selection = 0;
-
     private const float Speed = 100f;
+    private bool initiated = false;
     private GameObject rotatingShip;
 
-    private void Awake()
-    {
-        UnityLogger.Initiate();
-        LogFactory.Instance.Debug($"{ShipPrefabs.Length} ships loaded");
-
-        SpawnShip();
-    }
+    private GameObject[] ShipPrefabs => UIManager.Instance.ShipPrefabs;
+    private int Selection { get => UIManager.Instance.Selection; set => UIManager.Instance.Selection = value; }
 
     // Update is called once per frame
     void Update()
     {
         transform.Rotate(Vector3.down * Speed * Time.deltaTime);
+        if (!initiated)
+        {
+            SpawnShip();
+            initiated = true;
+        }
     }
 
     void SpawnShip()
@@ -34,7 +32,8 @@ public class ShipSelectionController : MonoBehaviour
             Destroy(rotatingShip);
         }
 
-        rotatingShip = Instantiate(ShipPrefabs[Selection], this.transform);
+        GameObject shipPrefab = ShipPrefabs[Selection];
+        rotatingShip = Instantiate(shipPrefab, this.transform);
     }
 
     public void SetNextShip()

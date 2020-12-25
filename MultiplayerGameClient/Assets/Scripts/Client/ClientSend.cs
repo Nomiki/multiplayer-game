@@ -13,8 +13,9 @@ namespace Assets.Scripts.Client
         {
             WelcomeReceivedMessage message = new WelcomeReceivedMessage()
             {
-                Username = UIManager.Instance.UsernameField.text,
                 ClientId = ClientManager.Instance.Client.Id,
+                ShipModelId = UIManager.Instance.Selection,
+                Username = UIManager.Instance.UsernameField.text,
             };
 
             Client.Tcp.SendMessage(message);

@@ -12,6 +12,9 @@ namespace GameNetworkingShared.Objects
         public int Id { get; set; }
 
         [Ordered]
+        public int ShipModelId { get; set; }
+
+        [Ordered]
         public string Username { get; set; } = string.Empty;
 
         [Ordered]
