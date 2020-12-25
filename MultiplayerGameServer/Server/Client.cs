@@ -4,6 +4,7 @@ using MultiplayerGameServer.Protocols;
 using System.Net;
 using System.Linq;
 using System.Net.Sockets;
+using GameNetworkingShared.Logging;
 
 namespace MultiplayerGameServer.Server
 {
@@ -31,18 +32,20 @@ namespace MultiplayerGameServer.Server
             ServerSend.UdpTest(Id);
         }
 
-        public void SpawnIntoGame(string username)
+        public void SpawnIntoGame(string username, int shipModelId)
         {
             Player = new Player()
             {
                 Id = Id,
+                ShipModelId = shipModelId,
                 Username = username,
                 Position = new PlayerPosition()
             };
 
+            LogFactory.Instance.Debug($"Spawning Player {Player.ToJson()} into game...");
             foreach (Client client in Server.Clients.Values.Where(x => x.Player != null && x.Id != Id))
             {
-                // Spawn every "enemy" player for the current spawned player
+                // Spawn every "other" player for the current spawned player
                 ServerSend.SpawnPlayer(Id, client.Player);
             }
 

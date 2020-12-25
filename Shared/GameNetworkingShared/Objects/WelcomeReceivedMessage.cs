@@ -13,5 +13,8 @@ namespace GameNetworkingShared.Objects
 
         [Ordered]
         public int ClientId { get; set; }
+
+        [Ordered]
+        public int ShipModelId { get; set; }
     }
 }

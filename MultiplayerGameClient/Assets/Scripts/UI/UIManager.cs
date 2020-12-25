@@ -11,6 +11,9 @@ namespace Assets.Scripts.UI
 
         public GameObject StartMenu;
         public InputField UsernameField;
+        public GameObject ShipSelectionGameObject;
+        public GameObject[] ShipPrefabs;
+        public int Selection = 0;
 
         private void Awake()
         {
@@ -30,6 +33,7 @@ namespace Assets.Scripts.UI
         {
             StartMenu.SetActive(false);
             UsernameField.interactable = false;
+            ShipSelectionGameObject.SetActive(false);
 
             ClientManager.Instance.ConnectToServer();
         }

@@ -20,13 +20,13 @@ namespace MultiplayerGameServer.Server
                 return;
             }
 
-            Server.Clients[fromClient].SpawnIntoGame(message.Username);
+            Server.Clients[fromClient].SpawnIntoGame(message.Username, message.ShipModelId);
         }
 
         public static void UdpTestReceived(Packet packet, int fromClient = -1)
         {
             UdpTest test = packet.ReadObj<UdpTest>();
-            LogFactory.Instance.Info($"Player {Server.Clients[fromClient].TcpEndpoint} connected successfully in udp: {test.Message}");
+            LogFactory.Instance.Info($"Player {fromClient} : {Server.Clients[fromClient].TcpEndpoint} connected successfully in udp: {test.Message}");
         }
     }
 }

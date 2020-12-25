@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Client;
 using Assets.Scripts.Logging;
+using Assets.Scripts.UI;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using System.Collections;
@@ -13,8 +14,7 @@ public class GameManager : MonoBehaviour
     public static Dictionary<int, PlayerManager> Players = 
         new Dictionary<int, PlayerManager>();
 
-    public GameObject localPlayerPrefab;
-    public GameObject remotePlayerPrefab;
+    public GameObject playerPrefab;
     public GameObject gameCamera;
 
     private void Awake()
@@ -34,13 +34,9 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayer(Player playerData)
     {
-        GameObject chosenPrefab = playerData.Id == ClientManager.Instance.Client.Id
-            ? localPlayerPrefab
-            : remotePlayerPrefab;
-
         Vector3 position = new Vector3(playerData.Position.X, playerData.Position.Y, playerData.Position.Z);
         Quaternion rotation = Quaternion.AngleAxis(playerData.Position.Angle, Vector3.forward);
-        GameObject player = Instantiate(chosenPrefab, position, rotation, this.transform);
+        GameObject player = Instantiate(playerPrefab, position, rotation, this.transform);
 
         if (playerData.Id == ClientManager.Instance.Client.Id)
         {
@@ -50,7 +46,7 @@ public class GameManager : MonoBehaviour
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         if (playerManager != null)
         {
-            playerManager.SetPlayerData(playerData);
+            playerManager.SetPlayerDataAndSpawnShipModel(playerData);
             Players.Add(playerData.Id, playerManager);
         }
     }
