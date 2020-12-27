@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool IsSelf = false;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -8,15 +8,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{   
+{
+    private const float RotationSpeed = 0.5f;
+
     public static GameManager Instance { get; set; }
 
-    public static Dictionary<int, PlayerManager> Players = 
+    public static Dictionary<int, PlayerManager> Players =
         new Dictionary<int, PlayerManager>();
 
     public GameObject playerPrefab;
     public GameObject gameCamera;
-
+    public Texture2D cursor;
     private void Awake()
     {
         UnityLogger.Initiate();
@@ -32,6 +34,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+    }
+
+    void Update()
+    {
+        RenderSettings.skybox.SetFloat("_Rotation", RotationSpeed * Time.time);
+    }
+
     public void SpawnPlayer(Player playerData)
     {
         Vector3 position = new Vector3(playerData.Position.X, playerData.Position.Y, playerData.Position.Z);
@@ -41,6 +52,7 @@ public class GameManager : MonoBehaviour
         if (playerData.Id == ClientManager.Instance.Client.Id)
         {
             gameCamera.GetComponent<CameraController>().Player = player.transform;
+            player.GetComponent<MouseController>().IsSelf = true;
         }
 
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
