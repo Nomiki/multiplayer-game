@@ -23,6 +23,12 @@ namespace MultiplayerGameServer.Server
             Server.Clients[fromClient].SpawnIntoGame(message.Username, message.ShipModelId);
         }
 
+        public static void PlayerMovementReceived(Packet packet, int fromClient = -1)
+        {
+            PlayerMovement movement = packet.ReadObj<PlayerMovement>();
+            Server.Clients[fromClient].SetMovement(movement);
+        }
+
         public static void UdpTestReceived(Packet packet, int fromClient = -1)
         {
             UdpTest test = packet.ReadObj<UdpTest>();

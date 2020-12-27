@@ -2,6 +2,7 @@
 using Assets.Scripts.UI;
 using GameNetworkingShared.Objects;
 using GameNetworkingShared.Protocols;
+using System;
 
 namespace Assets.Scripts.Client
 {
@@ -29,6 +30,11 @@ namespace Assets.Scripts.Client
             };
 
             Client.Udp.SendMessage(test);
+        }
+
+        internal static void SendPlayerMovement(PlayerMovement movement)
+        {
+            Client.Udp.SendMessage(movement);
         }
     }
 }

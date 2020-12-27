@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.UI;
 using GameNetworkingShared.Objects;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -9,10 +7,17 @@ public class PlayerManager : MonoBehaviour
     public int Id;
     public string Username;
     public int ShipModelId;
+    private MouseController MouseController;
 
     private void Start()
     {
-        
+        MouseController = GetComponent<MouseController>();
+    }
+
+    public void SetPlayerPosition(PlayerPosition position)
+    {
+        transform.position = new Vector3(position.X, position.Y, position.Z);
+        MouseController.SetRemoteAngle(position.Angle);
     }
 
     public void SetPlayerDataAndSpawnShipModel(Player playerData)

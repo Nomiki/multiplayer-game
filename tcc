@@ -1,0 +1,35 @@
+* [33m0ecde89[m [35m2 days ago [36mNissan Cohen [33m ([m[1;36mHEAD -> [m[1;32mwip/nissan/player-movement[m[33m, [m[1;31morigin/wip/nissan/player-movement[m[33m)[m[m Adding ship selection and ship model spawning
+* [33m98d5f58[m [35m3 days ago [36mNissan Cohen [m Adding ship selection - incomplete
+* [33me113e1b[m [35m3 days ago [36mNissan Cohen [m Adding spawning into game logic
+* [33m8940b62[m [35m3 days ago [36mNissan Cohen [m Adding connections to scripts
+* [33m76174a8[m [35m3 days ago [36mNissan Cohen [m Adding logs
+* [33mcfa3182[m [35m3 days ago [36mNissan Cohen [m Adding changes to unity project file
+* [33m51bbf9b[m [35m3 days ago [36mNissan Cohen [m Player Movement 1
+* [33m78c3997[m [35m7 days ago [36mNissan Cohen [33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m[m Changing scene to 3d
+* [33maf6f2db[m [35m7 days ago [36mNissan Cohen [m a more clean code
+* [33mea2a3dd[m [35m7 days ago [36mNissan Cohen [m Adding full udp support
+* [33m36679b3[m [35m7 days ago [36mNissan Cohen [m udp WIP
+* [33m43dbefb[m [35m3 weeks ago [36mNissan Cohen [m Refactor - rename ThreadManager to TaskQueue
+* [33m7857322[m [35m3 weeks ago [36mNissan Cohen [m Moving ReceiveCallback to base class
+* [33meff7464[m [35m3 weeks ago [36mNissan Cohen [m Adding server handling welcome packet received
+* [33mb3903c6[m [35m3 weeks ago [36mNissan Cohen [m auto message
+* [33m5a40ad7[m [35m3 weeks ago [36mNissan Cohen [m Handling welcome msg on client
+* [33mb486186[m [35m3 weeks ago [36mNissan Cohen [m Fixing up packet test to use ctor
+* [33meae2aa2[m [35m3 weeks ago [36mNissan Cohen [m Small fixes and tidying up code
+* [33m5b90ecb[m [35m3 weeks ago [36mNissan Cohen [m Fixing errors, adding generic TCP send methods
+* [33mc489456[m [35m3 weeks ago [36mrau eyal [m send welcome msg from server
+* [33mb6dfc57[m [35m3 weeks ago [36mNissan Cohen [m renaming Packet namespace to Packets
+* [33md8f9e1f[m [35m3 weeks ago [36mNissan Cohen [m Adding packet extension that can convert generic types
+* [33m4f1fe17[m [35m4 weeks ago [36mNissan Cohen [m Adding PacketBase
+* [33m8af730a[m [35m4 weeks ago [36mNissan Cohen [m Changing console title
+* [33md91f942[m [35m4 weeks ago [36mNissan Cohen [m Finishing tutorial 1
+* [33m769fe1d[m [35m4 weeks ago [36mNissan Cohen [m Removing vs
+* [33m72290d2[m [35m4 weeks ago [36mNissan Cohen [m Updating gitignore
+* [33m076b201[m [35m4 weeks ago [36mNissan Cohen [m Adding generic logger thing
+* [33m1b2d63b[m [35m4 weeks ago [36mNissan Cohen [m Adding plugin linkage between unity project and shared dll
+* [33ma3b0a6e[m [35m4 weeks ago [36mrau eyal [m init client server tcp
+* [33mfea0a2f[m [35m4 weeks ago [36mNissan Cohen [m Adding gitignore to root
+* [33m4ef06de[m [35m4 weeks ago [36mNissan Cohen [m Removing bin obj folders
+* [33med7bd75[m [35m4 weeks ago [36mNissan Cohen [m adding gitignore
+* [33m82d4808[m [35m4 weeks ago [36mNissan Cohen [m Adding starting packages
+* [33m90fdb40[m [35m4 weeks ago [36mNissan Cohen [m Initial commit

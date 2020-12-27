@@ -7,11 +7,14 @@ public class MouseController : MonoBehaviour
     public bool IsSelf = false;
 
     private float remoteAngle = 0f;
+    
+    public float Angle { get; set; }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.rotation = Quaternion.Euler(new Vector3(GetAngle(), 90f, -90f));
+        Angle = GetAngle();
+        transform.rotation = Quaternion.Euler(new Vector3(Angle, 90f, -90f));
     }
 
     private float GetAngle()
