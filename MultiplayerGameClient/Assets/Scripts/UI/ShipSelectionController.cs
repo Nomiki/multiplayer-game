@@ -34,6 +34,7 @@ public class ShipSelectionController : MonoBehaviour
 
         GameObject shipPrefab = ShipPrefabs[Selection];
         rotatingShip = Instantiate(shipPrefab, this.transform);
+        rotatingShip.layer = 5;
     }
 
     public void SetNextShip()

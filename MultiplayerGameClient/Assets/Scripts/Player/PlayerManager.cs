@@ -10,6 +10,11 @@ public class PlayerManager : MonoBehaviour
     public string Username;
     public int ShipModelId;
 
+    private void Start()
+    {
+        
+    }
+
     public void SetPlayerDataAndSpawnShipModel(Player playerData)
     {
         Id = playerData.Id;
