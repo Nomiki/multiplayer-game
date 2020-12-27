@@ -1,20 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Client;
+using GameNetworkingShared.Logging;
+using GameNetworkingShared.Objects;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public bool IsSelf = false;
 
-    // Start is called before the first frame update
-    void Start()
+    private MouseController MouseController { get; set; }
+
+    private void Start()
     {
-        
+        MouseController = GetComponent<MouseController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        SendInputToServer();
     }
+
+    private void SendInputToServer()
+    {
+        PlayerMovement movement = new PlayerMovement()
+        {
+            Up = Input.GetKey(KeyCode.W),
+            Down = Input.GetKey(KeyCode.S),
+            Left = Input.GetKey(KeyCode.A),
+            Right = Input.GetKey(KeyCode.D),
+            Angle = MouseController?.Angle ?? 0f
+        };
+
+        ClientSend.SendPlayerMovement(movement);
+    }
+
+
 }

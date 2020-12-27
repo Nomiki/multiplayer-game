@@ -2,9 +2,6 @@
 using GameNetworkingShared.Threading;
 using MultiplayerGameServer.Generic;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MultiplayerGameServer.Server
@@ -24,6 +21,7 @@ namespace MultiplayerGameServer.Server
                 {
                     nextIterationTime = nextIterationTime.AddMilliseconds(ServerConsts.MsPerTick);
                     TaskManager.Instance.RunQueuedTasks();
+                    UpdatableRepository.Instance.Update();
                     DateTime now = DateTime.Now;
                     if (nextIterationTime > now)
                     {

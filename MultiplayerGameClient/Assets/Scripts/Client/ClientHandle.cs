@@ -38,5 +38,12 @@ namespace Assets.Scripts.Client
 
             GameManager.Instance.SpawnPlayer(player);
         }
+
+        public static void HandlePlayerPosition(Packet packet, int fromClient = -1)
+        {
+            PlayerPosition position = packet.ReadObj<PlayerPosition>();
+            LogFactory.Instance.Debug($"Got Player movement: {position.ToJson()}");
+            GameManager.Instance.Players[position.Id].SetPlayerPosition(position);
+        }
     }
 }

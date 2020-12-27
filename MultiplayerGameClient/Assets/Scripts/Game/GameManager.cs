@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts.Client;
 using Assets.Scripts.Logging;
-using Assets.Scripts.UI;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; set; }
 
-    public static Dictionary<int, PlayerManager> Players =
+    public Dictionary<int, PlayerManager> Players =
         new Dictionary<int, PlayerManager>();
 
     public GameObject playerPrefab;
@@ -53,6 +51,7 @@ public class GameManager : MonoBehaviour
         {
             gameCamera.GetComponent<CameraController>().Player = player.transform;
             player.GetComponent<MouseController>().IsSelf = true;
+            player.GetComponent<PlayerController>().IsSelf = true;
         }
 
         PlayerManager playerManager = player.GetComponent<PlayerManager>();

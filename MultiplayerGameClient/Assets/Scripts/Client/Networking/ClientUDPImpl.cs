@@ -21,7 +21,8 @@ namespace Assets.Scripts.Client.Networking
         protected override Dictionary<Type, PacketHandler> PacketHandlers
             => new Dictionary<Type, PacketHandler>()
             {
-                { typeof(UdpTest), ClientHandle.HandleUdpTest }
+                { typeof(UdpTest), ClientHandle.HandleUdpTest },
+                { typeof(PlayerPosition), ClientHandle.HandlePlayerPosition },
             };
 
         public override void Connect(int localPort)

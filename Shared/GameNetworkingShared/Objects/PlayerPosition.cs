@@ -1,13 +1,13 @@
 ﻿using GameNetworkingShared.Packets;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GameNetworkingShared.Objects
 {
     [PacketTypeId(452160566)]
     public class PlayerPosition : IPacketSerializable
     {
+        [Ordered]
+        public int Id { get; set; }
+        
         [Ordered]
         public float X { get; set; }
 
@@ -23,14 +23,6 @@ namespace GameNetworkingShared.Objects
         public PlayerPosition()
         {
             // Emtpy Ctor;
-        }
-
-        public PlayerPosition(float x, float y, float z = 0, float angle = 0)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-            Angle = angle;
         }
     }
 }

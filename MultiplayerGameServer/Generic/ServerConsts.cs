@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MultiplayerGameServer.Generic
+﻿namespace MultiplayerGameServer.Generic
 {
     public class ServerConsts
     {

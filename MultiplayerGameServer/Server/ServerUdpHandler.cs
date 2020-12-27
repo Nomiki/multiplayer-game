@@ -16,7 +16,8 @@ namespace MultiplayerGameServer.Server
         protected override Dictionary<Type, PacketHandler> PacketHandlers
             => new Dictionary<Type, PacketHandler>()
             {
-                { typeof(UdpTest), ServerHandle.UdpTestReceived }
+                { typeof(UdpTest), ServerHandle.UdpTestReceived },
+                { typeof(PlayerMovement), ServerHandle.PlayerMovementReceived },
             };
 
 

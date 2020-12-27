@@ -31,5 +31,10 @@ namespace MultiplayerGameServer.Server
         {
             Server.Clients[id].Tcp.SendMessage(player);
         }
+
+        internal static void UpdatePlayerPositionRotation(Player player)
+        {
+            Server.UdpHandler.SendMessageToAll(player.Position);
+        }
     }
 }

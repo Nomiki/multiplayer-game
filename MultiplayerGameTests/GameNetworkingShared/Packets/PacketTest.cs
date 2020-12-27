@@ -98,6 +98,7 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
                 Username = "username",
                 Position = new PlayerPosition()
                 {
+                    Id = 3,
                     Angle = 143.4f,
                     X = -4f,
                     Y = -5f,
