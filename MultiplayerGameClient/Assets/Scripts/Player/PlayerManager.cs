@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    private float CameraOffset = -80f;
     public int Id;
     public string Username;
     public int ShipModelId;
@@ -17,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerPosition(PlayerPosition position)
     {
         transform.position = new Vector3(position.X, position.Y, position.Z);
+        Camera.main.transform.position = new Vector3(position.X, position.Y, CameraOffset);
         MouseController.SetRemoteAngle(position.Angle);
     }
 
