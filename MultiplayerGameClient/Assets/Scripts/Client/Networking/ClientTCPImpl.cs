@@ -24,7 +24,7 @@ namespace Assets.Scripts.Client.Networking
 
         public ClientTCPImpl() : base()
         {
-            // empty ctor
+            OnDisconnect += ClientManager.DisconnectClient;
         }
 
         public override void Connect(TcpClient client = null)

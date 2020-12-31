@@ -11,6 +11,8 @@ namespace Assets.Scripts.Client
 
         public CLIENT Client { get; private set; }
 
+        public bool IsConnected { get; set; }
+
         private void Awake()
         {
             UnityLogger.Initiate();
@@ -35,6 +37,20 @@ namespace Assets.Scripts.Client
         public void ConnectToServer()
         {
             Client.Tcp.Connect();
+            IsConnected = true;
+        }
+
+        private void OnApplicationQuit()
+        {
+            DisconnectClient();
+        }
+
+        public static void DisconnectClient(int id = -1)
+        {
+            if (Instance.IsConnected)
+            {
+                Instance.Client?.Disconnect();
+            }
         }
     }
 }

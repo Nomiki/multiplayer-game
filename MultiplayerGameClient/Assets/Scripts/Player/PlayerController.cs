@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        SendInputToServer();
+        if (IsSelf)
+        {
+            SendInputToServer();
+        }
     }
 
     private void SendInputToServer()

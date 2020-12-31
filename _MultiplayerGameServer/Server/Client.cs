@@ -85,9 +85,12 @@ namespace MultiplayerGameServer.Server
                 Vector3 movement = Vector3.Normalize(up * yDirection + right * xDirection) * MoveSpeed;
                 Position += movement;
             }
-            
-            Player.Position.Angle = Movement.Angle;
-            ServerSend.UpdatePlayerPositionRotation(Player);
+
+            if (Player != null)
+            {
+                Player.Position.Angle = Movement.Angle;
+                ServerSend.UpdatePlayerPositionRotation(Player);
+            }
         }
 
         public void SetMovement(PlayerMovement movement)
@@ -98,6 +101,14 @@ namespace MultiplayerGameServer.Server
         public void Update()
         {
             UpdateMovement();
+        }
+
+        public override void Disconnect()
+        {
+            LogFactory.Instance.Debug($"Client {Id}: {Tcp?.Socket?.Client.RemoteEndPoint} has disconnected.");
+            base.Disconnect();
+            UdpEndpoint = null;
+            Player = null;
         }
     }
 }

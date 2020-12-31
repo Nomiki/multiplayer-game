@@ -23,6 +23,8 @@ namespace GameNetworkingShared.Protocols
 
         public int Id { get; set; } = -1;
 
+        public event DisconnectHandler OnDisconnect;
+
         public abstract void Connect(int localPortOrId);
 
         protected UDP()
@@ -83,6 +85,12 @@ namespace GameNetworkingShared.Protocols
             }
 
             LogFactory.Instance.Error($"Could not find type for packet message id {packetMessageId}");
+        }
+
+        public void Disconnect()
+        {
+            Socket?.Dispose();
+            EndPoint = null;
         }
     }
 }
