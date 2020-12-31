@@ -20,6 +20,8 @@ namespace GameNetworkingShared.Protocols
         protected ITaskManager TaskManager => Threading.TaskManager.Instance;
         public int Id { get; protected set; } = -1;
 
+        public event DisconnectHandler OnDisconnect;
+
         protected TCP()
         {
             // Empty ctor
@@ -34,7 +36,7 @@ namespace GameNetworkingShared.Protocols
                 int byteLength = Stream.EndRead(result);
                 if (byteLength <= 0)
                 {
-                    //TODO: disconnect
+                    OnDisconnect.Invoke(Id);
                     return;
                 }
 
@@ -49,6 +51,7 @@ namespace GameNetworkingShared.Protocols
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                OnDisconnect.Invoke(Id);
             }
         }
 
@@ -120,6 +123,17 @@ namespace GameNetworkingShared.Protocols
             }
 
             LogFactory.Instance.Error($"Could not find type for packet message id {packetMessageId}");
+        }
+
+        public virtual void Disconnect()
+        {
+            Socket?.Close();
+            Stream?.Dispose();
+            ReceivedData?.Dispose();
+            Socket = null;
+            Stream = null;
+            ReceivedData = null;
+            ReceiveBuffer = null;
         }
     }
 }

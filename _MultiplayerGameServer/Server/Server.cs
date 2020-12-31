@@ -59,5 +59,10 @@ namespace MultiplayerGameServer.Server
                 Clients.Add(i, new Client(i));
             } 
         }
+
+        public static void DisconnectClient(int id)
+        {
+            Clients[id]?.Disconnect();
+        }
     }
 }

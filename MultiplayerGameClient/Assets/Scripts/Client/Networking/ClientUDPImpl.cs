@@ -16,6 +16,7 @@ namespace Assets.Scripts.Client.Networking
         public ClientUDPImpl() : base()
         {
             EndPoint = new IPEndPoint(IPAddress.Parse(ClientConstants.ServerIp), Constants.ServerPort);
+            OnDisconnect += ClientManager.DisconnectClient;
         }
 
         protected override Dictionary<Type, PacketHandler> PacketHandlers

@@ -23,5 +23,14 @@ namespace Assets.Scripts.Client.Networking
             Tcp = new ClientTCPImpl();
             Udp = new ClientUDPImpl();
         }
+
+        public override void Disconnect()
+        {
+            Tcp.Socket.Close();
+            base.Disconnect();
+            Udp.Socket.Close();
+            Udp.Disconnect();
+            Udp = null;
+        }
     }
 }
