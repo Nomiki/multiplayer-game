@@ -14,9 +14,4 @@
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MultiplayerGameServer\MultiplayerGameServer.csproj" />
-    <ProjectReference Include="..\Shared\GameNetworkingShared\GameNetworkingShared.csproj" />
-  </ItemGroup>
-
 </Project>
