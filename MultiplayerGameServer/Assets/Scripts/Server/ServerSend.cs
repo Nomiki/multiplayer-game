@@ -27,14 +27,14 @@ namespace MultiplayerGameServer.Server
             Server.UdpHandler.SendMessage(clientId, test);
         }
 
-        internal static void SpawnPlayer(int id, Player player)
+        internal static void SpawnPlayer(int id, PlayerPacket player)
         {
             Server.Clients[id].Tcp.SendMessage(player);
         }
 
-        internal static void UpdatePlayerPositionRotation(Player player)
+        internal static void UpdatePlayerPositionRotation(PlayerPosition position)
         {
-            Server.UdpHandler.SendMessageToAll(player.Position);
+            Server.UdpHandler.SendMessageToAll(position);
         }
     }
 }

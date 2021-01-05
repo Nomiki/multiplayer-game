@@ -33,7 +33,7 @@ namespace Assets.Scripts.Client
 
         public static void HandlePlayerJoin(Packet packet, int fromClient = -1)
         {
-            Player player = packet.ReadObj<Player>();
+            PlayerPacket player = packet.ReadObj<PlayerPacket>();
             LogFactory.Instance.Debug($"Got Player: {player.ToJson()}");
 
             GameManager.Instance.SpawnPlayer(player);

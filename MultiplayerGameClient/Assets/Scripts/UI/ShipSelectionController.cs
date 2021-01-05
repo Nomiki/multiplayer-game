@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Logging;
-using Assets.Scripts.UI;
+﻿using Assets.Scripts.UI;
 using GameNetworkingShared.Logging;
 using System.Collections;
 using System.Collections.Generic;

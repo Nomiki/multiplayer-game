@@ -92,7 +92,7 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
         [TestMethod]
         public void TestPacket_ClassHasNestedIPacketSerializable_ShouldConvertBackSuccessfully()
         {
-            Player obj = new Player()
+            PlayerPacket obj = new PlayerPacket()
             {
                 Id = 3,
                 Username = "username",
@@ -106,7 +106,7 @@ namespace MultiplayerGameTests.GameNetworkingShared.Packets
                 },
             };
 
-            Player response = DoPacketRoundTripMock(obj);
+            PlayerPacket response = DoPacketRoundTripMock(obj);
 
             response.Id.ShouldEqual(obj.Id);
             response.Username.ShouldEqual(obj.Username);

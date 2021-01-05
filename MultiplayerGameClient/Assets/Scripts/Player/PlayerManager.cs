@@ -28,7 +28,7 @@ public class PlayerManager : MonoBehaviour
         MouseController.SetRemoteAngle(position.Angle);
     }
 
-    public void SetPlayerDataAndSpawnShipModel(Player playerData)
+    public void SetPlayerDataAndSpawnShipModel(PlayerPacket playerData)
     {
         Id = playerData.Id;
         Username = playerData.Username;
