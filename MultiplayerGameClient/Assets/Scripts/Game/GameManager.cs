@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Client;
-using Assets.Scripts.Logging;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using System.Collections.Generic;
@@ -41,7 +40,7 @@ public class GameManager : MonoBehaviour
         RenderSettings.skybox.SetFloat("_Rotation", RotationSpeed * Time.time);
     }
 
-    public void SpawnPlayer(Player playerData)
+    public void SpawnPlayer(PlayerPacket playerData)
     {
         Vector3 position = new Vector3(playerData.Position.X, playerData.Position.Y, playerData.Position.Z);
         Quaternion rotation = Quaternion.AngleAxis(playerData.Position.Angle, Vector3.forward);

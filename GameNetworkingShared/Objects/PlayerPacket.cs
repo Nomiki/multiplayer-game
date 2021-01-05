@@ -3,7 +3,7 @@
 namespace GameNetworkingShared.Objects
 {
     [PacketTypeId(517118269)]
-    public class Player : IPacketSerializable
+    public class PlayerPacket : IPacketSerializable
     {
         [Ordered]
         public int Id { get; set; }

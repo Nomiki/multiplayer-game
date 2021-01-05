@@ -26,7 +26,7 @@ namespace MultiplayerGameServer.Server
         public static void PlayerMovementReceived(Packet packet, int fromClient = -1)
         {
             PlayerMovement movement = packet.ReadObj<PlayerMovement>();
-            Server.Clients[fromClient].SetMovement(movement);
+            Server.Clients[fromClient].Player?.SetMovement(movement);
         }
 
         public static void UdpTestReceived(Packet packet, int fromClient = -1)

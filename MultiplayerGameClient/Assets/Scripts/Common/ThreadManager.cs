@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Logging;
-using GameNetworkingShared.Logging;
+﻿using GameNetworkingShared.Logging;
 using GameNetworkingShared.Threading;
 using UnityEngine;
 

@@ -1,6 +1,4 @@
-﻿using GameNetworkingShared.Logging;
-
-namespace Assets.Scripts.Logging
+﻿namespace GameNetworkingShared.Logging
 {
     public class UnityLogger : ILog
     {

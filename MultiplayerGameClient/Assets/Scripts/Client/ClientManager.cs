@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Logging;
-using GameNetworkingShared.Logging;
+﻿using GameNetworkingShared.Logging;
 using UnityEngine;
 using CLIENT = Assets.Scripts.Client.Networking.Client;
 
