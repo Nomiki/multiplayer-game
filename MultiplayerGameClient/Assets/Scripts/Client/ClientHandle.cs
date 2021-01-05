@@ -1,6 +1,7 @@
 ﻿using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
 using GameNetworkingShared.Packets;
+using System;
 using System.Net;
 using UnityEngine;
 using CLIENT = Assets.Scripts.Client.Networking.Client;
@@ -21,6 +22,19 @@ namespace Assets.Scripts.Client
             ClientSend.SendWelcomeReceived();
 
             client.Udp.Connect(((IPEndPoint)client.Tcp.Socket.Client.LocalEndPoint).Port);
+        }
+
+        internal static void PlayerDisconnected(Packet packet, int fromClient)
+        {
+            PlayerDisconnectedPacket data = packet.ReadObj<PlayerDisconnectedPacket>();
+            LogFactory.Instance.Debug($"Player {data.Id} disconnected received, cleaning up...");
+
+            if (data.Id == ClientManager.Instance.Client.Id)
+            {
+                LogFactory.Instance.Error($"Detected self disconnect, this should never happen :(");
+            }
+
+            GameManager.Instance.DisconnectPlayer(data.Id);
         }
 
         public static void HandleUdpTest(Packet packet, int fromClient = -1)

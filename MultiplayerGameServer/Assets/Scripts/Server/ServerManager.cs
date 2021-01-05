@@ -36,13 +36,9 @@ public class ServerManager : MonoBehaviour
 
     private void Start()
     {
-
-#if UNITY_EDITOR
-        LogFactory.Instance.Error("Build the server to start it :(");
-#else
-        Server.Start(5, Constants.ServerPort);
-#endif
-
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+        Server.Instance.Start(5, Constants.ServerPort);
     }
 
     // Update is called once per frame
@@ -57,7 +53,13 @@ public class ServerManager : MonoBehaviour
         Quaternion rotation = playerPacket.Position.GetRotation();
 
         GameObject playerObj = Instantiate(PlayerPrefab, position, rotation, transform);
+        Player player = playerObj.GetComponent<Player>();
+        player.Id = playerPacket.Id;
+        return player;
+    }
 
-        return playerObj.GetComponent<Player>();
+    private void OnApplicationQuit()
+    {
+        Server.Instance.Dispose();
     }
 }

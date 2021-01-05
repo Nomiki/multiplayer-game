@@ -7,18 +7,22 @@ using System.Net.Sockets;
 
 namespace MultiplayerGameServer.Server
 {
-    public class Server
+    public class Server : IDisposable
     {
-        public static int MaxPlayers { get; private set; }
-        public static int Port { get; private set; }
+        private static Server instance;
 
-        private static TcpListener tcpListener;
+        public static Server Instance => instance ?? (instance = new Server());
 
-        public static ServerUdpHandler UdpHandler { get; set; }
+        public int MaxPlayers { get; private set; }
+        public int Port { get; private set; }
 
-        public static Dictionary<int, Client> Clients { get; private set; }
+        private TcpListener tcpListener;
 
-        public static void Start(int maxPlayers, int port)
+        public ServerUdpHandler UdpHandler { get; set; }
+
+        public Dictionary<int, Client> Clients { get; private set; }
+
+        public void Start(int maxPlayers, int port)
         {
             MaxPlayers = maxPlayers;
             Port = port;
@@ -32,7 +36,7 @@ namespace MultiplayerGameServer.Server
             UdpHandler = new ServerUdpHandler(Port);
         }
 
-        private static void TCPConnectCallback(IAsyncResult result)
+        private void TCPConnectCallback(IAsyncResult result)
         {
             TcpClient client = tcpListener.EndAcceptTcpClient(result);
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
@@ -50,7 +54,7 @@ namespace MultiplayerGameServer.Server
             LogFactory.Instance.Debug($"Could not connect {client.Client.RemoteEndPoint}. Reached max clients {MaxPlayers}");
         }
 
-        private static void InitializeServerData()
+        private void InitializeServerData()
         {
             Clients = new Dictionary<int, Client>();
 
@@ -60,9 +64,17 @@ namespace MultiplayerGameServer.Server
             } 
         }
 
-        public static void DisconnectClient(int id)
+        public void DisconnectClient(int id)
         {
             Clients[id]?.Disconnect();
+            LogFactory.Instance.Debug($"Done disconnecting client {Clients[id].Tcp.Socket}");
+            ServerSend.PlayerDisconnected(id);
+        }
+
+        public void Dispose()
+        {
+            tcpListener.Stop();
+            UdpHandler.Disconnect();
         }
     }
 }

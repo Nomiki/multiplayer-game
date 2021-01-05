@@ -46,16 +46,16 @@ namespace MultiplayerGameServer.Server
 
                 using Packet packet = new Packet(data);
                 int clientId = packet.ReadInt();
-                if (!Server.Clients.ContainsKey(clientId))
+                if (!Server.Instance.Clients.ContainsKey(clientId))
                 {
                     LogFactory.Instance.Error($"Client with id {clientId} tries to connect with UDP but doesn't exist");
                     return;
                 }
 
-                Client client = Server.Clients[clientId];
+                Client client = Server.Instance.Clients[clientId];
                 if (client.UdpEndpoint == null)
                 {
-                    Server.Clients[clientId].SetUdpEndpoint(endPoint);
+                    Server.Instance.Clients[clientId].SetUdpEndpoint(endPoint);
                 }
                 else if (!client.UdpEndpoint.Equals(endPoint))
                 {
@@ -85,7 +85,7 @@ namespace MultiplayerGameServer.Server
         private void SendMessage(int clientId, Packet packet)
         {
             packet.WriteLength();
-            SendData(packet, Server.Clients[clientId].UdpEndpoint);
+            SendData(packet, Server.Instance.Clients[clientId].UdpEndpoint);
         }
 
         public void SendMessageToAll<T>(T data, int exceptClient = -1)
@@ -101,7 +101,7 @@ namespace MultiplayerGameServer.Server
         private void SendMessageToAll(Packet packet, int exceptClient = -1)
         {
             packet.WriteLength();
-            foreach (Client client in Server.Clients.Values)
+            foreach (Client client in Server.Instance.Clients.Values)
             {
                 if (client.UdpEndpoint != null && client.Id != exceptClient)
                 {

@@ -1,11 +1,11 @@
 ﻿using Assets.Scripts.Client;
+using Assets.Scripts.Common;
 using Assets.Scripts.UI;
 using GameNetworkingShared.Objects;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private float CameraOffset = -80f;
     public int Id;
     public string Username;
     public int ShipModelId;
@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
 
         if (Id == ClientManager.Instance.Client.Id)
         {
-            Camera.main.transform.position = new Vector3(position.X, position.Y, CameraOffset);
+            Camera.main.transform.position = new Vector3(position.X, position.Y, ClientConstants.CameraOffset);
         }
         
         MouseController.SetRemoteAngle(position.Angle);

@@ -56,16 +56,16 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Server\Player.cs" />
     <Compile Include="Assets\Scripts\Server\Client.cs" />
     <Compile Include="Assets\Scripts\Protocols\ServerTCPImpl.cs" />
     <Compile Include="Assets\Scripts\Server\Server.cs" />
     <Compile Include="Assets\Scripts\Server\ServerSend.cs" />
+    <Compile Include="Assets\Scripts\Server\ServerManager.cs" />
     <Compile Include="Assets\Scripts\Generic\ServerConsts.cs" />
     <Compile Include="Assets\Scripts\Server\ServerHandle.cs" />
     <Compile Include="Assets\Scripts\Logging\ConsoleLogger.cs" />
     <Compile Include="Assets\Scripts\Server\ServerUdpHandler.cs" />
-    <Compile Include="Assets\Scripts\Server\ServerManager.cs" />
-    <Compile Include="Assets\Scripts\Server\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
