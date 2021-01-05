@@ -17,6 +17,7 @@ namespace Assets.Scripts.Client.Networking
             {
                 { typeof(WelcomeMessage), ClientHandle.Welcome },
                 { typeof(PlayerPacket), ClientHandle.HandlePlayerJoin },
+                { typeof(PlayerDisconnectedPacket), ClientHandle.PlayerDisconnected },
             };
 
         protected override Dictionary<Type, PacketHandler> PacketHandlers =>

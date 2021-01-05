@@ -23,7 +23,7 @@ namespace MultiplayerGameServer.Protocols
         public ServerTCPImpl(int id) : base()
         {
             Id = id;
-            OnDisconnect += Server.Server.DisconnectClient;
+            OnDisconnect += Server.Server.Instance.DisconnectClient;
         }
 
         public override void Connect(TcpClient socket = null)

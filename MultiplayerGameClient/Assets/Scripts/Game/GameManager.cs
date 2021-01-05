@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.Client;
+using Assets.Scripts.UI;
 using GameNetworkingShared.Logging;
 using GameNetworkingShared.Objects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +48,7 @@ public class GameManager : MonoBehaviour
         Quaternion rotation = Quaternion.AngleAxis(playerData.Position.Angle, Vector3.forward);
         GameObject player = Instantiate(playerPrefab, position, rotation, this.transform);
 
+        LogFactory.Instance.Debug($"{playerData.ToJson()}");
         if (playerData.Id == ClientManager.Instance.Client.Id)
         {
             gameCamera.GetComponent<CameraController>().Player = player.transform;
@@ -58,6 +61,16 @@ public class GameManager : MonoBehaviour
         {
             playerManager.SetPlayerDataAndSpawnShipModel(playerData);
             Players.Add(playerData.Id, playerManager);
+        }
+    }
+
+    internal void DisconnectPlayer(int id)
+    {
+        if (Players.ContainsKey(id))
+        {
+            Destroy(Players[id].gameObject);
+            ArrowController.Instance.RemoveArrow(id);
+            Players.Remove(id);
         }
     }
 }

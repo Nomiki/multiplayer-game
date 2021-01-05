@@ -5,6 +5,7 @@ using System.Net;
 using System.Linq;
 using GameNetworkingShared.Logging;
 using MultiplayerGameServer.Generic;
+using GameNetworkingShared.Threading;
 
 namespace MultiplayerGameServer.Server
 {
@@ -47,13 +48,13 @@ namespace MultiplayerGameServer.Server
             Player = ServerManager.Instance.InstatiatePlayer(PlayerPacket);
 
             LogFactory.Instance.Debug($"Spawning Player {PlayerPacket.ToJson()} into game...");
-            foreach (Client client in Server.Clients.Values.Where(x => x.PlayerPacket != null && x.Id != Id))
+            foreach (Client client in Server.Instance.Clients.Values.Where(x => x.PlayerPacket != null && x.Id != Id))
             {
                 // Spawn every "other" player for the current spawned player
                 ServerSend.SpawnPlayer(Id, client.PlayerPacket);
             }
 
-            foreach (Client client in Server.Clients.Values.Where(x => x.PlayerPacket != null))
+            foreach (Client client in Server.Instance.Clients.Values.Where(x => x.PlayerPacket != null))
             {
                 // Spawn the new player for all existing players in the session
                 ServerSend.SpawnPlayer(client.Id, PlayerPacket);
@@ -63,11 +64,15 @@ namespace MultiplayerGameServer.Server
         public override void Disconnect()
         {
             LogFactory.Instance.Debug($"Client {Id}: {Tcp?.Socket?.Client.RemoteEndPoint} has disconnected.");
-            UnityEngine.Object.Destroy(Player.gameObject);
-            base.Disconnect();
-            UdpEndpoint = null;
-            PlayerPacket = null;
-            Player = null;
+            TaskManager.Instance.QueueNewTask(() =>
+            {
+                LogFactory.Instance.Debug($"Destroying {Player} object {Player?.gameObject}");
+                UnityEngine.Object.Destroy(Player.gameObject);
+                base.Disconnect();
+                UdpEndpoint = null;
+                PlayerPacket = null;
+                Player = null;
+            });
         }
     }
 }

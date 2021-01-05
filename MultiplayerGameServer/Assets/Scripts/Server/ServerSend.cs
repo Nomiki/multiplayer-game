@@ -1,6 +1,7 @@
 ﻿using GameNetworkingShared.Objects;
 using GameNetworkingShared.Protocols;
 using System;
+using System.Linq;
 
 namespace MultiplayerGameServer.Server
 {
@@ -14,7 +15,7 @@ namespace MultiplayerGameServer.Server
                 ClientId = clientId,
             };
 
-            Server.Clients[clientId].Tcp.SendMessage(welcomeMessage);
+            Server.Instance.Clients[clientId].Tcp.SendMessage(welcomeMessage);
         }
 
         internal static void UdpTest(int clientId)
@@ -24,17 +25,23 @@ namespace MultiplayerGameServer.Server
                 Message = "UDP_OK",
             };
 
-            Server.UdpHandler.SendMessage(clientId, test);
+            Server.Instance.UdpHandler.SendMessage(clientId, test);
         }
 
         internal static void SpawnPlayer(int id, PlayerPacket player)
         {
-            Server.Clients[id].Tcp.SendMessage(player);
+            Server.Instance.Clients[id].Tcp.SendMessage(player);
         }
 
         internal static void UpdatePlayerPositionRotation(PlayerPosition position)
         {
-            Server.UdpHandler.SendMessageToAll(position);
+            Server.Instance.UdpHandler.SendMessageToAll(position);
+        }
+
+        internal static void PlayerDisconnected(int id)
+        {
+            PlayerDisconnectedPacket data = new PlayerDisconnectedPacket() { Id = id };
+            Server.Instance.Clients.Values.Select(x => x.Tcp).ToArray().SendMessageToAll(data);
         }
     }
 }
