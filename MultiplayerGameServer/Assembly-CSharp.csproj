@@ -66,6 +66,8 @@
     <Compile Include="Assets\Scripts\Server\ServerHandle.cs" />
     <Compile Include="Assets\Scripts\Logging\ConsoleLogger.cs" />
     <Compile Include="Assets\Scripts\Server\ServerUdpHandler.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Asteroid.cs" />
+    <Compile Include="Assets\Remote\Asteroids Pack\Assets\Scripts\RandomRotator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
