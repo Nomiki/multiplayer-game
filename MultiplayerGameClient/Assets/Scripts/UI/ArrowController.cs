@@ -16,7 +16,6 @@ namespace Assets.Scripts.UI
 
         public static ArrowController Instance { get; set; }
 
-
         private void Awake()
         {
             UnityLogger.Initiate();
@@ -64,10 +63,10 @@ namespace Assets.Scripts.UI
 
                 Arrows[player.Id].SetActive(true);
                 var angle = AngleBetweenTwoPoints(currentPlayerPositionOnScreen, otherPlayerPositionOnScreen);
-                Arrows[player.Id].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
+                Arrows[player.Id].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 180));
 
-                float arrowPosX = Mathf.Clamp(otherPlayerPositionOnScreen.x - 0.5f, -0.5f, 0.5f) * (Screen.width - 100);
-                float arrowPosY = Mathf.Clamp(otherPlayerPositionOnScreen.y - 0.5f, -0.5f, 0.5f) * (Screen.height - 100);
+                float arrowPosX = Mathf.Clamp(otherPlayerPositionOnScreen.x - 0.5f, -0.5f, 0.5f) * (Screen.width - 50f);
+                float arrowPosY = Mathf.Clamp(otherPlayerPositionOnScreen.y - 0.5f, -0.5f, 0.5f) * (Screen.height - 50f);
                 Arrows[player.Id].transform.position = new Vector3((Screen.width * 0.5f) + arrowPosX, (Screen.height * 0.5f) + arrowPosY, 0);
             }
         }
